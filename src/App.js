@@ -37,6 +37,7 @@ function App() {
     };
   }, []);
 
+  // Add the missing return statement here
   return (
     <div className="App">
       {loading ? (
