@@ -34,11 +34,10 @@ function App() {
 
     return () => {
       clearTimeout(timer);
-      // Clean up observer
-      observer.disconnect();
     };
   }, []);
 
+  // Add the missing return statement here
   return (
     <div className="App">
       {loading ? (
@@ -46,12 +45,14 @@ function App() {
       ) : (
         <>
           <Navbar />
-          <Hero />
-          <About />
-          <Skills />
-          <Projects />
-          <Experience />
-          <Contact />
+          <main>
+            <Hero />
+            <About />
+            <Skills />
+            <Projects />
+            <Experience />
+            <Contact />
+          </main>
         </>
       )}
     </div>
