@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-// Vercel Analytics
-import { inject } from '@vercel/analytics';
-inject(); // Initialize Vercel Analytics
+
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import About from './components/About';
