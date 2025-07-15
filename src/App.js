@@ -14,6 +14,11 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Set browser tab title
+    document.title = 'Shahmeer Ali | Portfolio';
+  }, []);
+
+  useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => clearTimeout(timer);
   }, []);
@@ -58,4 +63,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
