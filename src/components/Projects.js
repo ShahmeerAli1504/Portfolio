@@ -34,10 +34,10 @@ const projects = [
     videos: ['/media/dummy4.mp4']
   },
   {
-    title: 'Brick Breaker Game',
-    desc: 'Retro arcade game using 8086 Assembly.',
-    tech: 'Assembly, DOSBox',
-    details: 'Classic paddle-and-ball game built in low-level assembly with pixel-level collision detection and score tracking.',
+    title: 'Text-to-Image Microservice',
+    desc: 'gRPC-based Image Generator',
+    tech: ' Python, gRPC, NLP',
+    details: 'Developed a microservice that converts text prompts into context-aware images using open-source models. Deployed with GitHub Actions and showcased through Streamlit and Postman.',
     images: ['/media/dummy6.png'],
     videos: ['/media/dummy5.mp4']
   },
