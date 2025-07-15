@@ -38,8 +38,6 @@ const projects = [
     desc: 'gRPC-based Image Generator',
     tech: 'Python, gRPC, NLP',
     details: 'Developed a microservice that converts text prompts into context-aware images using open-source models. Deployed with GitHub Actions and showcased through Streamlit and Postman.',
-    images: ['/media/dummy6.png'],
-    videos: ['/media/dummy5.mp4'],
     link: 'https://github.com/dotyahya/text2image-ai-agent'
   },
   {
@@ -50,6 +48,22 @@ const projects = [
     images: ['/media/dummy7.png'],
     videos: ['/media/dummy6.mp4']
   },
+  {
+  title: 'Homeschooling Resources Platform',
+  desc: 'A platform providing categorized homeschooling content.',
+  tech: 'HTML, CSS',
+  details: 'Developed a responsive web platform to provide homeschooling resources to parents, teachers, and students. Includes an Admin Dashboard for uploading YouTube videos, PDFs, and social media links, along with a public-facing landing page with filtering features.',
+  images: [
+    '/media/login.png',
+    '/media/home.png',
+    '/media/contact.png',
+    '/media/about.png',
+    '/media/admin1.png',
+    '/media/admin2.png'
+  ],
+  link: 'https://github.com/ShahmeerAli1504/Homeschooling-Resources-Platform'
+}
+
 
 ];
 
