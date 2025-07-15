@@ -116,3 +116,42 @@
     max-width: 100%;
   }
 }
+
+
+.github-btn {
+  background-color: #24292e;
+  color: #ffffff;
+  padding: 10px 20px;
+  margin: 1rem 0;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 0 10px cyan;
+}
+
+.github-btn:hover {
+  background-color: #333;
+}
+.pagination-controls {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.pagination-btn {
+  background-color: cyan;
+  color: black;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.pagination-btn:hover {
+  background-color: #00ffff;
+}

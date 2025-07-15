@@ -36,10 +36,11 @@ const projects = [
   {
     title: 'Text-to-Image Microservice',
     desc: 'gRPC-based Image Generator',
-    tech: ' Python, gRPC, NLP',
+    tech: 'Python, gRPC, NLP',
     details: 'Developed a microservice that converts text prompts into context-aware images using open-source models. Deployed with GitHub Actions and showcased through Streamlit and Postman.',
     images: ['/media/dummy6.png'],
-    videos: ['/media/dummy5.mp4']
+    videos: ['/media/dummy5.mp4'],
+    link: 'https://github.com/dotyahya/text2image-ai-agent'
   },
   {
     title: 'Timetable Optimization',
@@ -48,21 +49,35 @@ const projects = [
     details: 'Generates optimized timetables using a backtracking algorithm ensuring no instructor or room conflicts across slots.',
     images: ['/media/dummy7.png'],
     videos: ['/media/dummy6.mp4']
-  }
+  },
+
 ];
+
+const ITEMS_PER_PAGE = 6;
 
 function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
+  const [page, setPage] = useState(0);
+
   const handleClose = () => setSelectedProject(null);
+
+  const paginatedProjects = projects.slice(
+    page * ITEMS_PER_PAGE,
+    (page + 1) * ITEMS_PER_PAGE
+  );
+
+  const hasNextPage = (page + 1) * ITEMS_PER_PAGE < projects.length;
+  const hasPrevPage = page > 0;
 
   return (
     <section id="projects" className="projects">
       <h2>Projects</h2>
+
       <div className="project-grid">
-        {projects.map((p, i) => (
+        {paginatedProjects.map((p, i) => (
           <div
             key={p.title}
-            className="project-card fade-in"
+            className="project-card fade-in show"
             style={{ transitionDelay: `${i * 0.1}s` }}
             onClick={() => setSelectedProject(p)}
           >
@@ -73,6 +88,15 @@ function Projects() {
         ))}
       </div>
 
+      <div className="pagination-controls">
+        {hasPrevPage && (
+          <button onClick={() => setPage(page - 1)} className="pagination-btn">← Previous</button>
+        )}
+        {hasNextPage && (
+          <button onClick={() => setPage(page + 1)} className="pagination-btn">Next →</button>
+        )}
+      </div>
+
       {selectedProject && (
         <div className="modal-overlay" onClick={handleClose}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -80,6 +104,16 @@ function Projects() {
             <h2>{selectedProject.title}</h2>
             <p><b>Description:</b> {selectedProject.details}</p>
             <p><b>Tech Stack:</b> {selectedProject.tech}</p>
+
+            {selectedProject.link && (
+              <a
+                href={selectedProject.link}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <button className="github-btn">View on GitHub</button>
+              </a>
+            )}
 
             <div className="modal-images">
               {selectedProject.images && selectedProject.images.map((img, idx) => (
