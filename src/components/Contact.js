@@ -75,7 +75,7 @@ function Contact() {
               </div>
               <div className="contact-text">
                 <h3>LinkedIn</h3>
-                <a href="https://linkedin.com/in/shahmeer-ali1504" target="_blank" rel="noopener noreferrer">shahmeer-ali1504</a>
+                <a href="https://www.linkedin.com/in/shahmeer-ali1504/" target="_blank" rel="noopener noreferrer">shahmeer-ali1504</a>
               </div>
             </div>
           </div>
