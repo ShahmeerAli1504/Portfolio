@@ -1,30 +1,55 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import emailjs from '@emailjs/browser';
 import './Contact.css';
 
 function Contact() {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [formStatus, setFormStatus] = useState({ submitted: false, error: false });
+  const form = useRef();
+  const [formStatus, setFormStatus] = useState({
+    submitting: false,
+    submitted: false,
+    error: false,
+    message: ''
+  });
 
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
-
-  const handleSubmit = (e) => {
+  const sendEmail = (e) => {
     e.preventDefault();
-    setFormStatus({ submitted: true, error: false });
-    setTimeout(() => setFormStatus({ submitted: false, error: false }), 3000);
+    setFormStatus({ ...formStatus, submitting: true });
+
+    // Replace these with your actual EmailJS credentials
+    const serviceId = 'service_inezbzc';
+    const templateId = 'template_ffgv1vb';
+    const publicKey = 'V_9Mrf_ah90CvNjLf';
+
+    emailjs.sendForm(serviceId, templateId, form.current, publicKey)
+      .then((result) => {
+        console.log('Email sent successfully:', result.text);
+        setFormStatus({
+          submitting: false,
+          submitted: true,
+          error: false,
+          message: 'Thanks for your message! I\'ll get back to you soon.'
+        });
+        form.current.reset();
+      })
+      .catch((error) => {
+        console.error('Email sending failed:', error.text);
+        setFormStatus({
+          submitting: false,
+          submitted: false,
+          error: true,
+          message: 'Something went wrong. Please try again later.'
+        });
+      });
   };
 
   return (
     <section id="contact" className="contact">
       <div className="contact-container">
-        <div className="contact-header">
-          <h2>Get In Touch</h2>
-          <div className="section-underline"></div>
-          <p className="contact-intro">Have a question or want to work together? Feel free to reach out!</p>
-        </div>
+        <h2>Get In Touch</h2>
         
         <div className="contact-content">
           <div className="contact-info">
-            <div className="contact-item">
+            <div className="contact-item fade-in show">
               <div className="contact-icon">
                 <i className="far fa-envelope"></i>
               </div>
@@ -34,7 +59,7 @@ function Contact() {
               </div>
             </div>
             
-            <div className="contact-item">
+            <div className="contact-item fade-in show">
               <div className="contact-icon">
                 <i className="fab fa-github"></i>
               </div>
@@ -44,7 +69,7 @@ function Contact() {
               </div>
             </div>
             
-            <div className="contact-item">
+            <div className="contact-item fade-in show">
               <div className="contact-icon">
                 <i className="fab fa-linkedin"></i>
               </div>
@@ -57,22 +82,20 @@ function Contact() {
           
           <div className="contact-form-container">
             {formStatus.submitted ? (
-              <div className="form-success-message">
+              <div className="form-success-message fade-in show">
                 <i className="fas fa-check-circle"></i>
-                <p>Thanks for your message! I'll get back to you soon.</p>
+                <p>{formStatus.message}</p>
               </div>
             ) : (
-              <form className="contact-form" onSubmit={handleSubmit}>
+              <form ref={form} className="contact-form fade-in show" onSubmit={sendEmail}>
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
                   <input 
                     id="name"
-                    name="name" 
+                    name="user_name" 
                     type="text" 
                     placeholder="Your Name" 
                     required 
-                    onChange={handleChange} 
-                    value={formData.name}
                   />
                 </div>
                 
@@ -80,12 +103,10 @@ function Contact() {
                   <label htmlFor="email">Email</label>
                   <input 
                     id="email"
-                    name="email" 
+                    name="user_email" 
                     type="email" 
                     placeholder="Your Email" 
                     required 
-                    onChange={handleChange} 
-                    value={formData.email}
                   />
                 </div>
                 
@@ -97,15 +118,23 @@ function Contact() {
                     placeholder="Your Message" 
                     rows="5" 
                     required 
-                    onChange={handleChange}
-                    value={formData.message}
                   ></textarea>
                 </div>
                 
-                <button type="submit" className="submit-btn">
-                  <span>Send Message</span>
-                  <i className="fas fa-paper-plane"></i>
+                <button type="submit" className="submit-btn" disabled={formStatus.submitting}>
+                  {formStatus.submitting ? 'Sending...' : (
+                    <>
+                      <span>Send Message</span>
+                      <i className="fas fa-paper-plane"></i>
+                    </>
+                  )}
                 </button>
+                
+                {formStatus.error && (
+                  <div className="form-error-message">
+                    <p>{formStatus.message}</p>
+                  </div>
+                )}
               </form>
             )}
           </div>
