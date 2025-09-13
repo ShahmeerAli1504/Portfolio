@@ -123,7 +123,15 @@ const projects = [
     tech: 'Go, Blockchain, PoW + BFT, cryptography',
     details: 'Blockchain system featuring sharding, hybrid PoW + BFT consensus with VRF leader election, Merkle forests, zero-knowledge proofs, MPC, homomorphic authentication, state pruning, Bloom filter verification—scalable, secure, and performant with benchmarks on latency and verification efficiency.',
     link: 'https://github.com/ShahmeerAli1504/distributed-ledger-with-sharding'
+},
+{
+  title: "Portfolio Website for Abdullah",
+  desc: "A sleek and responsive personal portfolio built for Abdullah, showcasing his work, skills, and achievements with a modern UI/UX design.",
+  tech: "Next.js, React, Tailwind CSS, Vercel",
+  details: "Developed a professional portfolio website for Abdullah using Next.js and Tailwind CSS. The site highlights his projects, skills, and experience with smooth navigation, responsive design, and optimized performance. Hosted seamlessly on Vercel for fast and reliable access.",
+  link: "https://abdullahs.vercel.app/"
 }
+
 
 ];
 

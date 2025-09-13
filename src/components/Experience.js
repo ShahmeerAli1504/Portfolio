@@ -3,6 +3,11 @@ import './Experience.css';
 
 const timeline = [
   {
+    title: 'Intern – Huawei Technologies',
+    time: 'September 2025',
+    desc: 'Learning about different architectures and technologies used in the telecom industry.'
+  },
+  {
     title: 'Intern – NADRA Headquarters',
     time: 'May 2024',
     desc: 'Built an asset management system and gained exposure to NADRA’s infrastructure and data processes.'
