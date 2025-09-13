@@ -126,7 +126,7 @@ const projects = [
 },
 {
   title: "Portfolio Website for Abdullah",
-  desc: "A sleek and responsive personal portfolio built for Abdullah, showcasing his work, skills, and achievements with a modern UI/UX design.",
+  desc: "A responsive personal portfolio built for Abdullah, showcasing his work, skills, and achievements with a modern UI/UX design.",
   tech: "Next.js, React, Tailwind CSS, Vercel",
   details: "Developed a professional portfolio website for Abdullah using Next.js and Tailwind CSS. The site highlights his projects, skills, and experience with smooth navigation, responsive design, optimized performance and hosted on Vercel.",
   link: "https://github.com/ShahmeerAli1504/Friendproject"
