@@ -12,7 +12,7 @@ function Hero() {
         <p>Frontend Developer | MERN Stack | AR & Blockchain Enthusiast</p>
         <div className="hero-buttons">
           <a href="#projects" className="btn">View Projects</a>
-          <a href="/Shahmeer_CV.pdf" download className="btn-outline">Download CV</a>
+          <a href="/Shahmeer_Ali_Akhtar_CV.pdf" download className="btn-outline">Download CV</a>
         </div>
       </div>
     </section>

@@ -3,7 +3,12 @@ import './Experience.css';
 
 const timeline = [
   {
-    title: 'JavaScript Developer – Xperion',
+    title: 'Network Design Architect – Huawei Technologies (via Hillcrest)',
+    time: 'Jan 2026 – Present',
+    desc: 'Working in the Cloud Core domain, supporting telecom core network operations, cloud-native core components, and enterprise-level telecom solutions as a Hillcrest employee deployed at Huawei.'
+  },
+  {
+    title: 'JavaScript Developer – Xperion (Remote)',
     time: 'Jan 2026 – Present',
     desc: 'Working as a JavaScript Developer on production-grade applications, contributing to feature development, bug fixes, and overall frontend functionality.'
   },
@@ -33,6 +38,7 @@ const timeline = [
     desc: 'Built responsive web applications using React, HTML, CSS, and JavaScript, assisted in UI component development, and collaborated in a fast-paced development environment.'
   }
 ];
+
 
 function Experience() {
   return (

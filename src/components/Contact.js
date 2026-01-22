@@ -15,7 +15,6 @@ function Contact() {
     e.preventDefault();
     setFormStatus({ ...formStatus, submitting: true });
 
-    // Replace these with your actual EmailJS credentials
     const serviceId = 'service_inezbzc';
     const templateId = 'template_ffgv1vb';
     const publicKey = 'V_9Mrf_ah90CvNjLf';
