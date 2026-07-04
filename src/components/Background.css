@@ -1,0 +1,208 @@
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Horizon glow — a thin luminous line where the page "begins" */
+.bg-horizon {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140vw;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, var(--accent) 40%, var(--accent-2) 60%, transparent 95%);
+  opacity: 0.55;
+  box-shadow: 0 0 80px 6px var(--glow);
+}
+
+/* Aurora ribbons — huge blurred conic gradients, slowly counter-rotating */
+.bg-aurora {
+  position: absolute;
+  left: 50%;
+  top: -60vh;
+  width: 160vmax;
+  aspect-ratio: 1;
+  margin-left: -80vmax;
+  border-radius: 50%;
+  filter: blur(70px) saturate(1.2);
+  opacity: 0.16;
+  will-change: transform;
+}
+
+.bg-aurora-a {
+  background: conic-gradient(
+    from 210deg at 50% 50%,
+    transparent 0deg,
+    var(--accent-strong) 55deg,
+    transparent 110deg,
+    var(--accent-2) 200deg,
+    transparent 260deg,
+    var(--accent) 310deg,
+    transparent 360deg
+  );
+  animation: aurora-spin 90s linear infinite;
+}
+
+.bg-aurora-b {
+  top: -70vh;
+  background: conic-gradient(
+    from 30deg at 50% 50%,
+    transparent 0deg,
+    var(--accent-2) 80deg,
+    transparent 160deg,
+    var(--accent-strong) 250deg,
+    transparent 330deg
+  );
+  opacity: 0.1;
+  animation: aurora-spin 140s linear infinite reverse;
+}
+
+@keyframes aurora-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body.light .bg-aurora-a {
+  opacity: 0.1;
+}
+
+body.light .bg-aurora-b {
+  opacity: 0.07;
+}
+
+body.light .bg-horizon {
+  opacity: 0.35;
+}
+
+/* Fine dot matrix, fading out toward the lower page */
+.bg-dots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--border-strong) 1px, transparent 1.5px);
+  background-size: 26px 26px;
+  mask-image: radial-gradient(ellipse 100% 65% at 50% 0%, black 10%, transparent 78%);
+  -webkit-mask-image: radial-gradient(ellipse 100% 65% at 50% 0%, black 10%, transparent 78%);
+  opacity: 0.5;
+}
+
+/* Meteor streaks — rare, thin, diagonal */
+.bg-meteors {
+  position: absolute;
+  inset: 0;
+}
+
+.bg-meteor {
+  position: absolute;
+  top: -8%;
+  width: 1px;
+  height: 110px;
+  background: linear-gradient(180deg, transparent, var(--accent), transparent);
+  transform: rotate(38deg);
+  opacity: 0;
+  animation: meteor 9s linear infinite;
+}
+
+.bg-meteor::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: -1.5px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 10px 2px var(--glow);
+}
+
+.bg-meteor:nth-child(1) {
+  left: 22%;
+  animation-delay: 2s;
+}
+
+.bg-meteor:nth-child(2) {
+  left: 58%;
+  height: 80px;
+  animation-delay: 6.5s;
+  animation-duration: 11s;
+}
+
+.bg-meteor:nth-child(3) {
+  left: 82%;
+  height: 130px;
+  animation-delay: 10s;
+  animation-duration: 13s;
+}
+
+@keyframes meteor {
+  0%,
+  74% {
+    opacity: 0;
+    transform: rotate(38deg) translateY(0);
+  }
+  76% {
+    opacity: 0.9;
+  }
+  88%,
+  100% {
+    opacity: 0;
+    transform: rotate(38deg) translateY(64vh);
+  }
+}
+
+body.light .bg-meteor {
+  display: none;
+}
+
+/* Cursor spotlight — soft radial glow tracking the pointer */
+.bg-spotlight {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  background: radial-gradient(
+    520px circle at var(--mx, 50vw) var(--my, -20vh),
+    var(--glow),
+    transparent 72%
+  );
+}
+
+body.light .bg-spotlight {
+  background: radial-gradient(
+    520px circle at var(--mx, 50vw) var(--my, -20vh),
+    rgba(37, 99, 235, 0.09),
+    transparent 72%
+  );
+}
+
+/* Film grain — kills gradient banding, adds texture */
+.bg-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+body.light .bg-grain {
+  opacity: 0.035;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-aurora,
+  .bg-meteor {
+    animation: none;
+  }
+
+  .bg-meteor {
+    display: none;
+  }
+
+  .bg-spotlight {
+    display: none;
+  }
+}

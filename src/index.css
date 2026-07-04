@@ -1,13 +1,329 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ============================================
+   Design tokens — dark-first, light override
+   ============================================ */
+:root {
+  /* Color */
+  --bg: #09090b;
+  --bg-soft: #0e0e11;
+  --surface: #131316;
+  --surface-2: #1a1a1f;
+  --text: #fafafa;
+  --text-muted: #a1a1aa;
+  --text-faint: #71717a;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --accent: #60a5fa;
+  --accent-strong: #3b82f6;
+  --accent-2: #a78bfa;
+  --accent-soft: rgba(96, 165, 250, 0.12);
+  --gradient: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  --success: #4ade80;
+  --danger: #f87171;
+  --glow: rgba(96, 165, 250, 0.25);
+  --scrim: rgba(0, 0, 0, 0.65);
+  --nav-bg: rgba(9, 9, 11, 0.72);
+
+  /* Type */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  /* Shape & depth */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-pop: 0 12px 40px rgba(0, 0, 0, 0.45);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 180ms;
+  --dur-med: 300ms;
+  --dur-slow: 600ms;
+
+  /* Layout */
+  --container: 1120px;
+  --nav-height: 68px;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body.light {
+  --bg: #fafafa;
+  --bg-soft: #f4f4f5;
+  --surface: #ffffff;
+  --surface-2: #f4f4f5;
+  --text: #18181b;
+  --text-muted: #52525b;
+  --text-faint: #71717a;
+  --border: rgba(0, 0, 0, 0.08);
+  --border-strong: rgba(0, 0, 0, 0.16);
+  --accent: #2563eb;
+  --accent-strong: #1d4ed8;
+  --accent-2: #7c3aed;
+  --accent-soft: rgba(37, 99, 235, 0.08);
+  --gradient: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  --success: #16a34a;
+  --danger: #dc2626;
+  --glow: rgba(37, 99, 235, 0.15);
+  --scrim: rgba(24, 24, 27, 0.5);
+  --nav-bg: rgba(250, 250, 250, 0.78);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.05), 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-pop: 0 12px 40px rgba(0, 0, 0, 0.14);
+}
+
+/* ============================================
+   Base
+   ============================================ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + 12px);
+  /* Clip pre-reveal translateX offsets so they never widen the page */
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color var(--dur-med) ease, color var(--dur-med) ease;
+  overflow-x: hidden;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+h1, h2, h3, h4, p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--accent-strong);
+  color: #fff;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-2);
+  border-radius: 8px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-faint);
+}
+
+/* ============================================
+   Shared section shell
+   ============================================ */
+.section {
+  position: relative;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 104px 24px;
+}
+
+.section-head {
+  margin-bottom: 48px;
+}
+
+.section-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.section-kicker::before {
+  content: '';
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.section-title {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.section-sub {
+  margin-top: 12px;
+  max-width: 560px;
+  color: var(--text-muted);
+  font-size: 1.02rem;
+}
+
+/* ============================================
+   Scroll reveal system
+   ============================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity var(--dur-slow) var(--ease-out),
+    transform var(--dur-slow) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal-left {
+  transform: translateX(-36px);
+}
+
+.reveal-right {
+  transform: translateX(36px);
+}
+
+.reveal-scale {
+  transform: scale(0.94);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================
+   Buttons
+   ============================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 26px;
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  border: 1px solid transparent;
+  transition:
+    transform var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-med) var(--ease-out),
+    background-color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease,
+    color var(--dur-fast) ease;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--gradient);
+  color: #fff;
+  box-shadow: 0 4px 20px var(--glow);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--glow);
+  color: #fff;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+
+/* Chips / tags */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+
+/* ============================================
+   Reduced motion
+   ============================================ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 72px 20px;
+  }
+
+  .section-head {
+    margin-bottom: 36px;
+  }
 }
