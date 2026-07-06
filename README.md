@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+# Shahmeer Ali — Portfolio
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Personal portfolio (React + Create React App), live at
+[portfolio-shahmmeerali.vercel.app](https://portfolio-shahmmeerali.vercel.app/).
+Dark-first design with cyan accents, motion-rich but dependency-light: every
+animation is hand-rolled CSS/rAF — no GSAP/Framer Motion in the bundle.
 
-## Available Scripts
+## Scripts
 
-In the project directory, you can run:
+```bash
+npm start          # dev server on :3000
+npm run build      # production build into build/
+npx serve -s build # serve the production build locally
+```
 
-### `npm start`
+## Where content lives
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+All content is plain data arrays at the top of each component — edit them,
+no markup changes needed:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+| Content            | File                            | What to edit                       |
+| ------------------ | ------------------------------- | ---------------------------------- |
+| Roles (typewriter) | `src/components/Hero.js`        | `ROLES` array                      |
+| Bio + highlights   | `src/components/About.js`       | `highlights` array, paragraphs     |
+| Jobs               | `src/components/Experience.js`  | `timeline` array (incl. `tech`)    |
+| Projects           | `src/components/Projects.js`    | `projects` array (`category` must match `CATEGORIES`; `featured: true` shows the star) |
+| Skills             | `src/components/Skill.js`       | `skillGroups` array                |
+| Contact channels   | `src/components/Contact.js`     | `channels` array, `EMAIL` constant |
+| Theme colors       | `src/index.css`                 | CSS variables in `:root` (dark) and `body.light` |
+| Résumé PDF         | `public/Shahmeer_CV.pdf`        | replace the file                   |
 
-### `npm test`
+Tech-pill colors on project cards come from `TECH_HUES` in `Projects.js`
+(lowercased tech name → HSL hue). Unlisted techs fall back to the cyan pill.
+Each project's preview strip shows a mock prompt from `CATEGORY_META`;
+set `cmd` on an individual project to override it (e.g. `cmd: 'npx next dev'`).
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Animation system
 
-### `npm run build`
+Everything respects `prefers-reduced-motion` (static fallbacks, no autoplay)
+and is disabled on touch devices where it doesn't make sense.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- **Scroll reveals** — `src/hooks/useReveal.js` adds `.visible` to `.reveal`
+  elements via IntersectionObserver (`reveal-left/right/scale` variants,
+  `--reveal-delay` for stagger). Styles in `src/index.css`.
+- **Custom cursor** — `src/components/Cursor.js`. Cyan dot + lerped trailing
+  ring; ring fills white with `mix-blend-mode: difference` over interactive
+  elements. Fine pointers only. Remove `<Cursor />` from `App.js` to disable.
+- **Magnetic buttons** — `src/hooks/useMagnetic.js`, delegated on `.btn`.
+  Tune pull with the `strength`/`max` args in `App.js`.
+- **Scroll-velocity skew** — `src/hooks/useScrollSkew.js` tilts containers
+  marked `data-skew` up to 1° with scroll speed. Delete the attribute on a
+  container to opt it out.
+- **Hero** — name uses a scramble/decode effect, role uses a typewriter
+  (first word holds ~4.5s so it reads complete), portrait has morphing
+  gradient blobs + opposite-direction mouse parallax (`useParallax`).
+- **Skills terminal** — `Skill.js` types `cat skills.txt` when scrolled into
+  view, then prints groups staggered.
+- **Contact constellation** — `src/components/Constellation.js`, canvas
+  particle network; pauses offscreen via IntersectionObserver.
+- **Count-up stat** — `src/hooks/useCountUp.js` (projects counter).
+- **Section numbers** — the big outlined `01…05` come from `data-num` on each
+  `<section>` (styled in `index.css`).
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Motion tokens (durations/easings) are CSS variables in `index.css` —
+`--dur-fast/med/slow`, `--ease-out/in-out` — change them there to retime the
+whole site.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Contact form
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Posts through EmailJS (`@emailjs/browser`) with the service/template/public
+keys in `Contact.js`. Fields: `user_name`, `user_email`, `subject`, `message`.
+Don't submit the form while testing — it sends real email.

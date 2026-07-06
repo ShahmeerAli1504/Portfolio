@@ -1,8 +1,37 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './Projects.css';
-import { GitHubIcon, CloseIcon, ExternalLinkIcon } from './Icons';
+import useCountUp from '../hooks/useCountUp';
+import {
+  GitHubIcon,
+  CloseIcon,
+  ExternalLinkIcon,
+  CodeIcon,
+  ServerIcon,
+  TerminalIcon,
+  SparklesIcon,
+} from './Icons';
 
 const projects = [
+  {
+    title: 'ActraGen — AI Platform',
+    desc: 'Multi-tenant AI platform for custom tools, workflows, and RAG-powered chat.',
+    tech: 'Next.js, React, TypeScript, MongoDB, OpenAI',
+    category: 'AR & AI',
+    cmd: 'npx next dev',
+    featured: true,
+    details:
+      'Built during my time at Dafinitiq AI. ActraGen lets organizations create custom AI tools with dynamic prompts, chain them into automated workflows, and run persona-based assistants (analyst, consultant, CMO and more) with bilingual English/Arabic RTL support. Includes a secure RAG subsystem: PDF ingestion with OCR, page-aware chunking, embeddings, MongoDB Atlas Vector Search, and hybrid retrieval over internal knowledge plus whitelisted external sources — all serving source-cited answers. Implemented role-based auth (OTP, email verification, JWT/NextAuth), multi-tenant isolation with subscriptions and usage tracking, admin dashboards with audit logging and analytics, and S3-backed storage, using OpenAI for tool generation and Gemini for embeddings.',
+  },
+  {
+    title: 'RoDrive — Ride-Hailing Backend',
+    desc: 'Mobility backend: dispatch, payments, subscriptions, and rentals.',
+    tech: 'Node.js, Express, MySQL, CakePHP, AWS',
+    category: 'Web',
+    cmd: 'node server.js',
+    featured: true,
+    details:
+      'Worked on this during my time at Dafinitiq AI. RoDrive is a large-scale ride-hailing and rental backend combining a CakePHP operations portal with a Node.js/Express API layer over MySQL (25 route modules, 64 services, 77 Sequelize models). Covered the trip lifecycle — booking, dispatch, driver assignment, fare estimation, cancellations — plus driver/rider onboarding, wallets and payouts, Plan A–D subscription lifecycles, JazzCash and Stripe payments, FCM/Twilio/email notifications, geofenced multi-city operations, and a rental marketplace with chauffeur assignment. Cron-driven automation handled trip timeouts, reminders, and subscription expiry; delivery ran through Docker, GitHub Actions, and AWS ECS/ECR.',
+  },
   {
     title: 'LingoLearn',
     desc: 'An AR-based language learning app using Unity3D.',
@@ -163,6 +192,44 @@ const projects = [
 const CATEGORIES = ['All', 'Web', 'Distributed Systems', 'Systems', 'AR & AI'];
 const INITIAL_COUNT = 6;
 
+/* Preview strip styling per category: hue + icon + prompt line */
+const CATEGORY_META = {
+  Web: { hue: 197, icon: CodeIcon, cmd: 'npm run dev' },
+  'Distributed Systems': { hue: 262, icon: ServerIcon, cmd: 'go run ./cluster' },
+  Systems: { hue: 152, icon: TerminalIcon, cmd: 'make && ./bin/run' },
+  'AR & AI': { hue: 316, icon: SparklesIcon, cmd: 'python train.py' },
+};
+
+/* Colored tech pills — known techs get their own hue, rest stay cyan */
+const TECH_HUES = {
+  react: 193,
+  'react.js': 193,
+  javascript: 48,
+  typescript: 211,
+  'node.js': 120,
+  aws: 35,
+  python: 207,
+  go: 185,
+  golang: 185,
+  c: 220,
+  'c++': 220,
+  'c++17': 220,
+  'c#': 268,
+  'asp.net': 268,
+  unity3d: 145,
+  'mern stack': 122,
+  mongodb: 122,
+  mysql: 200,
+  blockchain: 32,
+  nlp: 316,
+  grpc: 174,
+  raft: 262,
+  bash: 100,
+  'tailwind css': 190,
+};
+
+const techHue = (t) => TECH_HUES[t.trim().toLowerCase()];
+
 function Projects() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [filter, setFilter] = useState('All');
@@ -171,6 +238,7 @@ function Projects() {
   const filtered =
     filter === 'All' ? projects : projects.filter((p) => p.category === filter);
   const visible = filtered.slice(0, visibleCount);
+  const [countRef, projectCount] = useCountUp(projects.length);
 
   const handleClose = useCallback(() => setSelectedProject(null), []);
 
@@ -194,13 +262,14 @@ function Projects() {
   }, [selectedProject, handleClose]);
 
   return (
-    <section id="projects" className="projects section">
+    <section id="projects" className="projects section" data-num="03">
       <div className="section-head reveal">
         <span className="section-kicker">03 — Projects</span>
         <h2 className="section-title">What I've built</h2>
-        <p className="section-sub">
-          {projects.length} projects across web apps, distributed systems,
-          low-level programming, AI and AR. Click any card for details.
+        <p className="section-sub" ref={countRef}>
+          <span className="stat-number">{projectCount}</span> projects across
+          web apps, distributed systems, low-level programming, AI and AR.
+          Click any card for details.
         </p>
       </div>
 
@@ -222,31 +291,50 @@ function Projects() {
         ))}
       </div>
 
-      <div className="project-grid">
-        {visible.map((p, i) => (
-          <button
-            key={p.title}
-            type="button"
-            className="project-card reveal"
-            style={{ '--reveal-delay': `${(i % 3) * 90}ms` }}
-            onClick={() => setSelectedProject(p)}
-          >
-            <div className="project-card-top">
-              <span className="project-category">{p.category}</span>
-              {p.featured && <span className="project-featured">★ Featured</span>}
-            </div>
-            <h3>{p.title}</h3>
-            <p className="project-desc">{p.desc}</p>
-            <div className="project-tags">
-              {p.tech.split(',').slice(0, 4).map((t) => (
-                <span key={t} className="tag">
-                  {t.trim()}
+      <div className="project-grid" data-skew>
+        {visible.map((p, i) => {
+          const meta = CATEGORY_META[p.category] || CATEGORY_META.Web;
+          const PreviewIcon = meta.icon;
+          return (
+            <button
+              key={p.title}
+              type="button"
+              className="project-card reveal"
+              style={{ '--reveal-delay': `${(i % 3) * 90}ms`, '--cat-h': meta.hue }}
+              onClick={() => setSelectedProject(p)}
+            >
+              <div className="project-preview" aria-hidden="true">
+                <PreviewIcon className="project-preview-icon" />
+                <span className="project-preview-cmd">
+                  <span className="project-preview-prompt">$</span> {p.cmd || meta.cmd}
                 </span>
-              ))}
-            </div>
-            <span className="project-more">View details →</span>
-          </button>
-        ))}
+              </div>
+              <div className="project-card-body">
+                <div className="project-card-top">
+                  <span className="project-category">{p.category}</span>
+                  {p.featured && <span className="project-featured">★ Featured</span>}
+                </div>
+                <h3>{p.title}</h3>
+                <p className="project-desc">{p.desc}</p>
+                <div className="project-tags">
+                  {p.tech.split(',').slice(0, 4).map((t) => {
+                    const hue = techHue(t);
+                    return (
+                      <span
+                        key={t}
+                        className={`tag ${hue !== undefined ? 'tag-colored' : ''}`}
+                        style={hue !== undefined ? { '--tag-h': hue } : undefined}
+                      >
+                        {t.trim()}
+                      </span>
+                    );
+                  })}
+                </div>
+                <span className="project-more">View details →</span>
+              </div>
+            </button>
+          );
+        })}
       </div>
 
       {visibleCount < filtered.length && (

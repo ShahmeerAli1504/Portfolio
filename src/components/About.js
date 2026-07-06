@@ -25,12 +25,27 @@ const highlights = [
   },
 ];
 
+/* Each word gets its own span so the heading can fade in word-by-word
+   once the section head reveals (delay driven by --wi). */
+const Words = ({ text, offset = 0 }) =>
+  text.split(' ').map((word, i) => (
+    <React.Fragment key={word}>
+      <span className="word" style={{ '--wi': offset + i }}>
+        {word}
+      </span>{' '}
+    </React.Fragment>
+  ));
+
 function About() {
   return (
-    <section id="about" className="about section">
+    <section id="about" className="about section" data-num="01">
       <div className="section-head reveal">
         <span className="section-kicker">01 — About</span>
-        <h2 className="section-title">Design-minded engineer,<br />systems-level thinker</h2>
+        <h2 className="section-title">
+          <Words text="Design-minded engineer," />
+          <br />
+          <Words text="systems-level thinker" offset={2} />
+        </h2>
       </div>
 
       <div className="about-grid">
@@ -52,7 +67,7 @@ function About() {
           </a>
         </div>
 
-        <div className="about-cards">
+        <div className="about-cards" data-skew>
           {highlights.map(({ icon: Icon, title, text }, i) => (
             <div
               key={title}

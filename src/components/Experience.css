@@ -4,6 +4,13 @@
   padding-left: 8px;
 }
 
+.timeline-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+}
+
 .timeline::before {
   content: '';
   position: absolute;
@@ -74,12 +81,14 @@
 }
 
 .timeline-item:hover .timeline-card {
-  transform: translateX(6px);
-  border-color: var(--border-strong);
+  transform: scale(1.02);
+  border-color: var(--accent);
+  box-shadow: 0 10px 30px var(--glow);
 }
 
 .timeline-item:hover .timeline-dot {
-  transform: scale(1.25);
+  transform: scale(1.3);
+  box-shadow: 0 0 12px var(--glow);
 }
 
 .timeline-card-head {
@@ -130,6 +139,36 @@
 @media (prefers-reduced-motion: reduce) {
   .timeline-dot.is-current {
     animation: none;
+  }
+}
+
+/* Desktop: central line, cards alternate left/right of it */
+@media (min-width: 900px) {
+  .timeline {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-left: 0;
+  }
+
+  .timeline::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .timeline-item {
+    width: calc(50% + 12px);
+    padding-bottom: 32px;
+  }
+
+  /* Marker is 24px wide; item edges overlap the center by 12px so the
+     dot's center always lands exactly on the line. */
+  .timeline-item.is-left {
+    flex-direction: row-reverse;
+    margin-right: auto;
+  }
+
+  .timeline-item.is-right {
+    margin-left: calc(50% - 12px);
   }
 }
 

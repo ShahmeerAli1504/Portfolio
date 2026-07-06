@@ -5,6 +5,17 @@
   align-items: start;
 }
 
+/* Particle network background */
+.constellation {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  pointer-events: none;
+}
+
 /* Channels */
 .contact-info {
   display: flex;
@@ -66,6 +77,94 @@
   color: var(--accent);
 }
 
+.contact-item-wrap {
+  position: relative;
+}
+
+.contact-item-wrap .contact-item {
+  width: 100%;
+}
+
+.contact-item-wrap:has(.copy-btn) .contact-item {
+  padding-right: 68px;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease,
+    box-shadow var(--dur-fast) ease;
+}
+
+.copy-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 14px var(--glow);
+}
+
+/* Availability */
+.contact-availability {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 18px;
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-strong);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.contact-availability > svg:first-child {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.contact-availability strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.availability-check {
+  color: var(--success);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Toast */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 32px;
+  z-index: 300;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  box-shadow: 0 8px 30px var(--glow);
+  opacity: 0;
+  transform: translate(-50%, 16px);
+  pointer-events: none;
+  transition: opacity var(--dur-med) ease, transform var(--dur-med) var(--ease-out);
+}
+
+.toast-visible {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
 /* Form */
 .contact-form-container {
   padding: 32px;
@@ -90,13 +189,41 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
-.form-group label {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--text);
+/* Floating labels: label rests inside the field, lifts to straddle the
+   top border once the field is focused or holds a value. */
+.form-float {
+  position: relative;
+}
+
+.form-float label {
+  position: absolute;
+  top: 13px;
+  left: 12px;
+  padding: 0 5px;
+  border-radius: 4px;
+  font-size: 0.98rem;
+  color: var(--text-faint);
+  background: transparent;
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) ease, background-color var(--dur-fast) ease;
+}
+
+.form-float input:focus + label,
+.form-float input:not(:placeholder-shown) + label,
+.form-float textarea:focus + label,
+.form-float textarea:not(:placeholder-shown) + label {
+  transform: translateY(-22px) scale(0.8);
+  background: var(--surface);
+  color: var(--text-muted);
+}
+
+.form-float input:focus + label,
+.form-float textarea:focus + label {
+  color: var(--accent);
 }
 
 .form-group input,
@@ -144,8 +271,8 @@
 .btn-spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.35);
-  border-top-color: #fff;
+  border: 2px solid color-mix(in srgb, currentColor 35%, transparent);
+  border-top-color: currentColor;
   border-radius: 50%;
   animation: spinner 0.7s linear infinite;
 }
@@ -190,8 +317,13 @@
     flex-wrap: wrap;
   }
 
-  .contact-item {
+  .contact-item-wrap,
+  .contact-availability {
     flex: 1 1 240px;
+  }
+
+  .contact-item {
+    height: 100%;
   }
 }
 

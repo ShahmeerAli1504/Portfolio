@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import './App.css';
 
 import Background from './components/Background';
@@ -10,33 +10,31 @@ import Projects from './components/Projects';
 import Skills from './components/Skill';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Loader from './components/Loader';
+import Cursor from './components/Cursor';
 import useReveal from './hooks/useReveal';
+import useMagnetic from './hooks/useMagnetic';
+import useScrollSkew from './hooks/useScrollSkew';
 
 function App() {
-  const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     document.title = 'Shahmeer Ali | Software Engineer';
-    // Apply the saved theme before the Navbar mounts so the loader matches
+    // Apply the saved theme before the Navbar mounts.
+    // classList (not className=) so other body classes survive.
     const saved = localStorage.getItem('theme');
-    document.body.className = saved === 'light' ? 'light' : 'dark';
+    document.body.classList.toggle('light', saved === 'light');
+    document.body.classList.toggle('dark', saved !== 'light');
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1400);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useReveal([loading]);
-
-  if (loading) {
-    return <Loader />;
-  }
+  // No blocking loader — the page paints immediately and the staggered
+  // navbar/hero entrance provides the load choreography (better LCP).
+  useReveal([]);
+  useMagnetic('.btn');
+  useScrollSkew(1);
 
   return (
     <div className="App">
       <Background />
+      <Cursor />
 
       <Navbar />
       <main>

@@ -54,7 +54,7 @@
   border-radius: 3px;
   background: var(--gradient);
   transform-origin: left;
-  animation: fill 1.3s var(--ease-in-out) both;
+  animation: fill 0.8s var(--ease-in-out) both;
 }
 
 @keyframes fill {

@@ -19,6 +19,7 @@
 
 /* Badge */
 .hero-badge {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -30,6 +31,35 @@
   font-weight: 500;
   color: var(--text-muted);
   margin-bottom: 24px;
+  transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+/* Glow pulses via pseudo-element opacity (compositor-only), not by
+   animating box-shadow itself (per-frame repaint). */
+.hero-badge::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 999px;
+  box-shadow: 0 0 18px 0 var(--glow);
+  opacity: 0;
+  animation: badge-glow 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.hero-badge:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+@keyframes badge-glow {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .hero-badge-dot {
@@ -52,17 +82,35 @@
 
 /* Headline */
 .hero-title {
+  font-family: var(--font-display);
   font-size: clamp(2.4rem, 6vw, 4rem);
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: -0.03em;
   line-height: 1.08;
+  text-shadow: 0 0 48px var(--glow);
 }
 
 .hero-name {
+  position: relative;
+  display: inline-block;
   background: var(--gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.hero-name-size {
+  visibility: hidden;
+}
+
+.hero-name-anim {
+  position: absolute;
+  inset: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
 }
 
 /* Typewriter role */
@@ -158,6 +206,63 @@
   place-items: center;
 }
 
+/* Gradient mesh — soft radial-gradient blobs (no filter: blur, which
+   would re-rasterize every frame) drifting via transform only, so the
+   whole thing stays on the compositor. Drifts with the pointer (same
+   direction as mouse; portrait moves opposite). */
+.hero-mesh {
+  position: absolute;
+  inset: -18%;
+  translate: calc(var(--px, 0) * 22px) calc(var(--py, 0) * 16px);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.hero-blob {
+  position: absolute;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  animation: blob-drift 16s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-blob-a {
+  width: 72%;
+  top: -4%;
+  left: -6%;
+  background: radial-gradient(circle, var(--accent) 0%, transparent 62%);
+}
+
+.hero-blob-b {
+  width: 66%;
+  right: -4%;
+  bottom: 0;
+  background: radial-gradient(circle, var(--accent-2) 0%, transparent 62%);
+  animation-delay: -6s;
+  animation-duration: 19s;
+}
+
+.hero-blob-c {
+  width: 56%;
+  left: 20%;
+  bottom: -8%;
+  background: radial-gradient(circle, #2563eb 0%, transparent 62%);
+  animation-delay: -11s;
+  animation-duration: 23s;
+}
+
+@keyframes blob-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(7%, -9%) scale(1.15);
+  }
+  100% {
+    transform: translate(-7%, 6%) scale(0.88);
+  }
+}
+
 .hero-portrait {
   position: relative;
   width: min(300px, 70vw);
@@ -167,6 +272,29 @@
   background: var(--gradient);
   box-shadow: 0 0 60px var(--glow);
   animation: float 6s ease-in-out infinite;
+  translate: calc(var(--px, 0) * -14px) calc(var(--py, 0) * -10px);
+}
+
+/* Slow-pulsing glow ring (opacity-only animation, compositor friendly) */
+.hero-portrait::after {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  box-shadow: 0 0 90px 8px var(--glow);
+  opacity: 0.4;
+  animation: glow-pulse 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .hero-portrait img {
@@ -248,11 +376,19 @@
 
 @media (prefers-reduced-motion: reduce) {
   .hero-portrait,
+  .hero-portrait::after,
   .hero-orbit,
   .hero-scroll-cue,
   .hero-caret,
-  .hero-badge-dot {
+  .hero-badge::after,
+  .hero-badge-dot,
+  .hero-blob {
     animation: none;
+  }
+
+  .hero-mesh,
+  .hero-portrait {
+    translate: none;
   }
 }
 
