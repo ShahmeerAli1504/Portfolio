@@ -23,13 +23,13 @@
 .bg-aurora {
   position: absolute;
   left: 50%;
-  top: -60vh;
-  width: 160vmax;
+  top: -50vh;
+  width: 120vmax;
   aspect-ratio: 1;
-  margin-left: -80vmax;
+  margin-left: -60vmax;
   border-radius: 50%;
-  filter: blur(70px) saturate(1.2);
-  opacity: 0.16;
+  filter: blur(24px);
+  opacity: 0.18;
   will-change: transform;
 }
 
@@ -48,7 +48,7 @@
 }
 
 .bg-aurora-b {
-  top: -70vh;
+  top: -60vh;
   background: conic-gradient(
     from 30deg at 50% 50%,
     transparent 0deg,
@@ -57,7 +57,7 @@
     var(--accent-strong) 250deg,
     transparent 330deg
   );
-  opacity: 0.1;
+  opacity: 0.12;
   animation: aurora-spin 140s linear infinite reverse;
 }
 
@@ -158,34 +158,34 @@ body.light .bg-meteor {
   display: none;
 }
 
-/* Cursor spotlight — soft radial glow tracking the pointer */
+/* Ambient top spotlight — soft static radial glow */
 .bg-spotlight {
   position: absolute;
   inset: 0;
-  opacity: 0;
-  transition: opacity 600ms ease;
+  opacity: 0.45;
   background: radial-gradient(
-    520px circle at var(--mx, 50vw) var(--my, -20vh),
+    600px circle at 50vw -10vh,
     var(--glow),
-    transparent 72%
+    transparent 70%
   );
+  pointer-events: none;
 }
 
 body.light .bg-spotlight {
   background: radial-gradient(
-    520px circle at var(--mx, 50vw) var(--my, -20vh),
+    600px circle at 50vw -10vh,
     rgba(37, 99, 235, 0.09),
-    transparent 72%
+    transparent 70%
   );
 }
 
-/* Film grain — kills gradient banding, adds texture */
+/* Film grain — lightweight CSS radial texture without heavy SVG noise filters */
 .bg-grain {
   position: absolute;
   inset: 0;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 160px 160px;
+  opacity: 0.03;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.4) 1px, transparent 0);
+  background-size: 8px 8px;
 }
 
 body.light .bg-grain {

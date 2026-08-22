@@ -1,13 +1,6 @@
-/* Hide the native cursor while the custom one is active; keep the
-   I-beam on text fields where it carries real information. */
-body.has-cursor,
-body.has-cursor * {
-  cursor: none;
-}
-
-body.has-cursor input,
-body.has-cursor textarea {
-  cursor: text;
+/* Keep native OS cursor active for 120Hz native pointer responsiveness */
+body.has-cursor {
+  cursor: auto;
 }
 
 .cursor-dot,

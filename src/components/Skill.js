@@ -26,38 +26,25 @@ const TOTAL = skillGroups.reduce((n, g) => n + g.skills.length, 0);
 /* Types CMD once the terminal scrolls into view; renders it instantly
    under reduced motion or without IntersectionObserver. */
 function useTerminalTyping(ref) {
-  const [typed, setTyped] = useState('');
-  const [started, setStarted] = useState(false);
-  const done = typed === CMD;
+  const [done, setDone] = useState(true);
 
   useEffect(() => {
     const el = ref.current;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!el || reduced || !('IntersectionObserver' in window)) {
-      setTyped(CMD);
-      setStarted(true);
-      return undefined;
-    }
+    if (!el || !('IntersectionObserver' in window)) return;
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setStarted(true);
+          setDone(true);
           io.disconnect();
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.1 }
     );
     io.observe(el);
     return () => io.disconnect();
   }, [ref]);
 
-  useEffect(() => {
-    if (!started || done) return undefined;
-    const t = setTimeout(() => setTyped(CMD.slice(0, typed.length + 1)), 55);
-    return () => clearTimeout(t);
-  }, [started, typed, done]);
-
-  return { typed, done };
+  return { typed: CMD, done };
 }
 
 function Skills() {

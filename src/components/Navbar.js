@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Navbar.css';
 import { SunIcon, MoonIcon, MenuIcon, CloseIcon } from './Icons';
 
@@ -18,9 +18,9 @@ function Navbar() {
     return true;
   });
   const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [activeId, setActiveId] = useState('home');
   const [menuOpen, setMenuOpen] = useState(false);
+  const progressRef = useRef(null);
 
   useEffect(() => {
     document.body.classList.toggle('dark', darkMode);
@@ -28,17 +28,25 @@ function Navbar() {
     localStorage.setItem('theme', darkMode ? 'dark' : 'light');
   }, [darkMode]);
 
-  // Scroll state: glass background + reading progress
+  // Scroll state: glass background + reading progress (direct DOM transform for 60fps scroll)
   useEffect(() => {
     let ticking = false;
+    let isScrolled = false;
     const onScroll = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        setScrolled(y > 12);
+        const nextScrolled = y > 12;
+        if (nextScrolled !== isScrolled) {
+          isScrolled = nextScrolled;
+          setScrolled(nextScrolled);
+        }
         const max = document.documentElement.scrollHeight - window.innerHeight;
-        setProgress(max > 0 ? Math.min(y / max, 1) : 0);
+        const progress = max > 0 ? Math.min(y / max, 1) : 0;
+        if (progressRef.current) {
+          progressRef.current.style.transform = `scaleX(${progress})`;
+        }
         ticking = false;
       });
     };
@@ -121,7 +129,7 @@ function Navbar() {
         </div>
       </div>
 
-      <div className="scroll-progress" style={{ transform: `scaleX(${progress})` }} />
+      <div className="scroll-progress" ref={progressRef} />
 
       {/* Mobile drawer */}
       <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>

@@ -20,12 +20,15 @@ const ROLES = [
 const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*<>/';
 
 /* Decode effect: characters randomize, then resolve left-to-right. */
-function useScramble(finalText, duration = 1200, delay = 250) {
-  const [display, setDisplay] = useState(finalText);
-
+function useScramble(ref, finalText, duration = 1200, delay = 250) {
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return undefined;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) return undefined;
+    if (reduced) {
+      el.textContent = finalText;
+      return undefined;
+    }
 
     let raf = 0;
     let start = 0;
@@ -42,14 +45,14 @@ function useScramble(finalText, duration = 1200, delay = 250) {
     };
 
     const timer = setTimeout(() => {
-      setDisplay(randomize(0));
+      el.textContent = randomize(0);
       const tick = (now) => {
         if (!start) start = now;
         const p = Math.min((now - start) / duration, 1);
         const resolved = Math.floor(finalText.length * p);
-        setDisplay(randomize(resolved));
+        el.textContent = randomize(resolved);
         if (p < 1) raf = requestAnimationFrame(tick);
-        else setDisplay(finalText);
+        else el.textContent = finalText;
       };
       raf = requestAnimationFrame(tick);
     }, delay);
@@ -58,47 +61,49 @@ function useScramble(finalText, duration = 1200, delay = 250) {
       clearTimeout(timer);
       cancelAnimationFrame(raf);
     };
-  }, [finalText, duration, delay]);
-
-  return display;
+  }, [ref, finalText, duration, delay]);
 }
 
-function useTypewriter(words) {
-  const [text, setText] = useState('');
-  const [wordIndex, setWordIndex] = useState(0);
-  const [deleting, setDeleting] = useState(false);
-  const [reducedMotion] = useState(
-    () => window.matchMedia('(prefers-reduced-motion: reduce)').matches
-  );
-
+function useTypewriter(ref, words) {
   useEffect(() => {
-    if (reducedMotion) {
-      setText(words[0]);
+    const el = ref.current;
+    if (!el) return undefined;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) {
+      el.textContent = words[0];
       return undefined;
     }
 
-    const current = words[wordIndex % words.length];
-    let delay = deleting ? 40 : 80;
-    // Hold the completed word — the first one longest, so the primary
-    // title is always readable on arrival.
-    if (!deleting && text === current) delay = wordIndex === 0 ? 4500 : 2400;
-    else if (deleting && text === '') delay = 350;
+    let wordIndex = 0;
+    let charIndex = 0;
+    let deleting = false;
+    let timer = 0;
 
-    const timer = setTimeout(() => {
-      if (!deleting && text === current) {
-        setDeleting(true);
-      } else if (deleting && text === '') {
-        setDeleting(false);
-        setWordIndex((i) => (i + 1) % words.length);
+    const tick = () => {
+      const current = words[wordIndex % words.length];
+      if (deleting) {
+        charIndex -= 1;
       } else {
-        setText(current.slice(0, text.length + (deleting ? -1 : 1)));
+        charIndex += 1;
       }
-    }, delay);
+      el.textContent = current.slice(0, charIndex);
 
+      let delay = deleting ? 45 : 80;
+      if (!deleting && charIndex === current.length) {
+        delay = wordIndex === 0 ? 4000 : 2200;
+        deleting = true;
+      } else if (deleting && charIndex === 0) {
+        deleting = false;
+        wordIndex = (wordIndex + 1) % words.length;
+        delay = 350;
+      }
+
+      timer = setTimeout(tick, delay);
+    };
+
+    tick();
     return () => clearTimeout(timer);
-  }, [text, deleting, wordIndex, words, reducedMotion]);
-
-  return text;
+  }, [ref, words]);
 }
 
 /* Mouse parallax: writes normalized pointer coords to CSS vars on the
@@ -131,9 +136,12 @@ function useParallax(ref) {
 }
 
 function Hero() {
-  const role = useTypewriter(ROLES);
-  const name = useScramble('Shahmeer Ali');
+  const roleRef = useRef(null);
+  const nameRef = useRef(null);
   const visualRef = useRef(null);
+
+  useTypewriter(roleRef, ROLES);
+  useScramble(nameRef, 'Shahmeer Ali');
   useParallax(visualRef);
 
   return (
@@ -155,15 +163,17 @@ function Hero() {
               <span className="hero-name-size" aria-hidden="true">
                 Shahmeer Ali
               </span>
-              <span className="hero-name-anim" aria-hidden="true">
-                {name}
+              <span className="hero-name-anim" aria-hidden="true" ref={nameRef}>
+                Shahmeer Ali
               </span>
             </span>
           </h1>
 
           <p className="hero-role reveal" style={{ '--reveal-delay': '160ms' }}>
             <span className="sr-only">Software Engineer</span>
-            <span className="hero-role-text" aria-hidden="true">{role}</span>
+            <span className="hero-role-text" aria-hidden="true" ref={roleRef}>
+              Software Engineer
+            </span>
             <span className="hero-caret" aria-hidden="true" />
           </p>
 

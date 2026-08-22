@@ -13,6 +13,28 @@ import {
 
 const projects = [
   {
+    title: 'Pure Haven Studio',
+    desc: 'Sanctuary massage therapy studio client website in South Reno.',
+    tech: 'Next.js, React, Tailwind CSS, Vercel',
+    category: 'Web',
+    cmd: 'npx next dev',
+    featured: true,
+    details:
+      'Designed and built a full client website for Pure Haven Massage Therapy in South Reno, NV. Features custom therapeutic service showcases (Swedish, Deep Tissue, Hot Stone, Cupping), therapist bio, clean responsive studio gallery, Yelp client review integrations, clear studio policies, and direct MassageBook online appointment booking.',
+    link: 'https://www.purehaven.studio/',
+  },
+  {
+    title: 'Potluck Food Truck',
+    desc: "Client Website — Reno's premier Asian Fusion food truck platform.",
+    tech: 'Next.js, React, Tailwind CSS, Vercel',
+    category: 'Web',
+    cmd: 'npx next dev',
+    featured: true,
+    details:
+      "Developed an interactive client web app for Potluck Food Truck in Reno, Nevada. Highlights signature street food creations (Cheeseburger Wonton Tacos, Elote Chicken Fries, Pan-Seared Potstickers), real-time searchable/filterable menu, weekly location schedules, event catering booking workflows, and responsive dark-mode branding.",
+    link: 'https://potluck-food-truck.vercel.app/',
+  },
+  {
     title: 'ActraGen — AI Platform',
     desc: 'Multi-tenant AI platform for custom tools, workflows, and RAG-powered chat.',
     tech: 'Next.js, React, TypeScript, MongoDB, OpenAI',
@@ -226,6 +248,8 @@ const TECH_HUES = {
   raft: 262,
   bash: 100,
   'tailwind css': 190,
+  'next.js': 200,
+  vercel: 280,
 };
 
 const techHue = (t) => TECH_HUES[t.trim().toLowerCase()];
@@ -398,7 +422,7 @@ function Projects() {
             {selectedProject.videos && (
               <div className="modal-videos">
                 {selectedProject.videos.map((vid) => (
-                  <video key={vid} controls preload="metadata">
+                  <video key={vid} controls preload="none">
                     <source src={vid} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>

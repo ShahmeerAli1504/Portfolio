@@ -10,7 +10,6 @@ import Projects from './components/Projects';
 import Skills from './components/Skill';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
-import Cursor from './components/Cursor';
 import useReveal from './hooks/useReveal';
 import useMagnetic from './hooks/useMagnetic';
 import useScrollSkew from './hooks/useScrollSkew';
@@ -34,7 +33,6 @@ function App() {
   return (
     <div className="App">
       <Background />
-      <Cursor />
 
       <Navbar />
       <main>

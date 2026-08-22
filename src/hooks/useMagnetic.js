@@ -14,6 +14,7 @@ export default function useMagnetic(selector = '.btn', strength = 0.25, max = 10
     if (!fine || reduced) return undefined;
 
     let el = null;
+    let rect = null;
     let raf = 0;
 
     const reset = (target) => {
@@ -25,12 +26,12 @@ export default function useMagnetic(selector = '.btn', strength = 0.25, max = 10
       if (t !== el) {
         reset(el);
         el = t;
+        rect = el ? el.getBoundingClientRect() : null;
       }
-      if (!el) return;
+      if (!el || !rect) return;
 
-      const r = el.getBoundingClientRect();
-      const dx = (e.clientX - (r.left + r.width / 2)) * strength;
-      const dy = (e.clientY - (r.top + r.height / 2)) * strength;
+      const dx = (e.clientX - (rect.left + rect.width / 2)) * strength;
+      const dy = (e.clientY - (rect.top + rect.height / 2)) * strength;
       const mx = Math.max(-max, Math.min(max, dx));
       const my = Math.max(-max, Math.min(max, dy));
 
@@ -45,6 +46,7 @@ export default function useMagnetic(selector = '.btn', strength = 0.25, max = 10
     const onLeaveDoc = () => {
       reset(el);
       el = null;
+      rect = null;
     };
 
     document.addEventListener('mousemove', onMove, { passive: true });

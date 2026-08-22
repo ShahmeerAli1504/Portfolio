@@ -13,7 +13,9 @@ function Constellation() {
     if (!canvas || reduced) return undefined;
 
     const ctx = canvas.getContext('2d');
-    const LINK_DIST = 110;
+    if (!ctx) return undefined;
+    const LINK_DIST = 100;
+    const LINK_DIST_SQ = LINK_DIST * LINK_DIST;
     const mouse = { x: -1e4, y: -1e4 };
     let particles = [];
     let w = 0;
@@ -28,18 +30,18 @@ function Constellation() {
 
     const resize = () => {
       const rect = canvas.parentElement.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       w = rect.width;
       h = rect.height;
       canvas.width = w * dpr;
       canvas.height = h * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const count = Math.min(70, Math.floor((w * h) / 16000));
+      const count = Math.min(38, Math.floor((w * h) / 22000));
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * w,
         y: Math.random() * h,
-        vx: (Math.random() - 0.5) * 0.35,
-        vy: (Math.random() - 0.5) * 0.35,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
       }));
     };
 
@@ -50,10 +52,11 @@ function Constellation() {
         // Gentle repulsion from the pointer
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
-        const md = Math.hypot(dx, dy);
-        if (md < 120 && md > 0.001) {
-          p.x += (dx / md) * 0.6;
-          p.y += (dy / md) * 0.6;
+        const mdSq = dx * dx + dy * dy;
+        if (mdSq < 14400 && mdSq > 0.01) {
+          const md = Math.sqrt(mdSq);
+          p.x += (dx / md) * 0.5;
+          p.y += (dy / md) * 0.5;
         }
 
         p.x += p.vx;
@@ -73,19 +76,22 @@ function Constellation() {
         for (let j = i + 1; j < particles.length; j += 1) {
           const a = particles[i];
           const b = particles[j];
-          const d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d < LINK_DIST) {
+          const dx = a.x - b.x;
+          const dy = a.y - b.y;
+          const dSq = dx * dx + dy * dy;
+          if (dSq < LINK_DIST_SQ) {
+            const d = Math.sqrt(dSq);
             ctx.beginPath();
             ctx.moveTo(a.x, a.y);
             ctx.lineTo(b.x, b.y);
-            ctx.strokeStyle = color((1 - d / LINK_DIST) * 0.22);
+            ctx.strokeStyle = color((1 - d / LINK_DIST) * 0.2);
             ctx.lineWidth = 1;
             ctx.stroke();
           }
         }
       }
 
-      raf = requestAnimationFrame(step);
+      if (visible) raf = requestAnimationFrame(step);
     };
 
     const io = new IntersectionObserver(([entry]) => {

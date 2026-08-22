@@ -27,15 +27,28 @@ export default function useReveal(deps = []) {
       { threshold: 0.12, rootMargin: '0px 0px -48px 0px' }
     );
 
-    const observeAll = () => {
-      document
+    const observeElements = (root = document) => {
+      root
         .querySelectorAll('.reveal:not(.visible)')
         .forEach((el) => io.observe(el));
     };
 
-    observeAll();
+    observeElements();
 
-    const mo = new MutationObserver(observeAll);
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach((m) => {
+        m.addedNodes.forEach((node) => {
+          if (node.nodeType === 1) {
+            if (node.matches && node.matches('.reveal:not(.visible)')) {
+              io.observe(node);
+            }
+            if (node.querySelectorAll) {
+              observeElements(node);
+            }
+          }
+        });
+      });
+    });
     mo.observe(document.body, { childList: true, subtree: true });
 
     return () => {
