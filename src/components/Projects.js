@@ -405,8 +405,17 @@ function Projects() {
                 rel="noopener noreferrer"
                 className="btn btn-primary modal-link"
               >
-                <GitHubIcon width={18} height={18} />
-                View on GitHub
+                {selectedProject.link.includes('github.com') ? (
+                  <>
+                    <GitHubIcon width={18} height={18} />
+                    View on GitHub
+                  </>
+                ) : (
+                  <>
+                    <ExternalLinkIcon width={18} height={18} />
+                    View Live Site
+                  </>
+                )}
                 <ExternalLinkIcon width={16} height={16} />
               </a>
             )}
