@@ -5,8 +5,7 @@ const timeline = [
   {
     role: 'JavaScript Developer',
     company: 'Agentic Dream · Remote',
-    time: 'Jan 2026 – Present',
-    current: true,
+    time: 'Jan 2026 – August 2026',
     desc: 'Developing and maintaining internal tools that power core product workflows, building dynamic, responsive user interfaces in JavaScript and improving system stability through debugging and feature enhancements.',
     tech: ['JavaScript', 'React', 'Node.js', 'REST APIs'],
   },
