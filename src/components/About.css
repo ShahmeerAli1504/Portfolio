@@ -60,19 +60,14 @@
 .about-card {
   padding: 24px;
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--surface) 72%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: var(--surface);
   border: 1px solid var(--border);
   box-shadow: var(--shadow-card);
-  transition: transform var(--dur-med) var(--ease-out),
-    border-color var(--dur-med) ease, box-shadow var(--dur-med) var(--ease-out);
+  transition: border-color var(--dur-fast) ease;
 }
 
 .about-card:hover {
-  transform: translateY(-8px);
   border-color: var(--accent);
-  box-shadow: 0 14px 36px var(--glow);
 }
 
 .about-card-icon {

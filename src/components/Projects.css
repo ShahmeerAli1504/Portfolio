@@ -72,14 +72,11 @@
   color: var(--text);
   text-align: left;
   font: inherit;
-  transition: transform var(--dur-med) var(--ease-out),
-    border-color var(--dur-med) ease, box-shadow var(--dur-med) var(--ease-out);
+  transition: border-color var(--dur-fast) ease;
 }
 
 .project-card:hover {
-  transform: translateY(-6px) scale(1.02);
   border-color: var(--accent);
-  box-shadow: 0 12px 32px var(--glow);
 }
 
 /* Preview strip — category-tinted gradient + icon + mock prompt */
@@ -215,8 +212,6 @@ body.light .tag-colored {
   place-items: center;
   padding: 20px;
   background: var(--scrim);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
   animation: overlay-in var(--dur-med) ease both;
 }
 

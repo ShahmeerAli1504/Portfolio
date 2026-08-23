@@ -17,122 +17,21 @@ const ROLES = [
   'AR & Blockchain Enthusiast',
 ];
 
-const SCRAMBLE_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#$%&*<>/';
-
-/* Decode effect: characters randomize, then resolve left-to-right. */
-function useScramble(ref, finalText, duration = 1200, delay = 250) {
+/* Static display for name and role */
+function useScramble(ref, finalText) {
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return undefined;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      el.textContent = finalText;
-      return undefined;
-    }
-
-    let raf = 0;
-    let start = 0;
-
-    const randomize = (from) => {
-      let out = finalText.slice(0, from);
-      for (let i = from; i < finalText.length; i += 1) {
-        out +=
-          finalText[i] === ' '
-            ? ' '
-            : SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-      }
-      return out;
-    };
-
-    const timer = setTimeout(() => {
-      el.textContent = randomize(0);
-      const tick = (now) => {
-        if (!start) start = now;
-        const p = Math.min((now - start) / duration, 1);
-        const resolved = Math.floor(finalText.length * p);
-        el.textContent = randomize(resolved);
-        if (p < 1) raf = requestAnimationFrame(tick);
-        else el.textContent = finalText;
-      };
-      raf = requestAnimationFrame(tick);
-    }, delay);
-
-    return () => {
-      clearTimeout(timer);
-      cancelAnimationFrame(raf);
-    };
-  }, [ref, finalText, duration, delay]);
+    if (ref.current) ref.current.textContent = finalText;
+  }, [ref, finalText]);
 }
 
 function useTypewriter(ref, words) {
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return undefined;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (reduced) {
-      el.textContent = words[0];
-      return undefined;
-    }
-
-    let wordIndex = 0;
-    let charIndex = 0;
-    let deleting = false;
-    let timer = 0;
-
-    const tick = () => {
-      const current = words[wordIndex % words.length];
-      if (deleting) {
-        charIndex -= 1;
-      } else {
-        charIndex += 1;
-      }
-      el.textContent = current.slice(0, charIndex);
-
-      let delay = deleting ? 45 : 80;
-      if (!deleting && charIndex === current.length) {
-        delay = wordIndex === 0 ? 4000 : 2200;
-        deleting = true;
-      } else if (deleting && charIndex === 0) {
-        deleting = false;
-        wordIndex = (wordIndex + 1) % words.length;
-        delay = 350;
-      }
-
-      timer = setTimeout(tick, delay);
-    };
-
-    tick();
-    return () => clearTimeout(timer);
+    if (ref.current) ref.current.textContent = words[0];
   }, [ref, words]);
 }
 
-/* Mouse parallax: writes normalized pointer coords to CSS vars on the
-   visual wrapper; the portrait and mesh read them in opposite signs. */
-function useParallax(ref) {
-  useEffect(() => {
-    const el = ref.current;
-    const fine = window.matchMedia('(pointer: fine)').matches;
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!el || !fine || reduced) return undefined;
-
-    let raf = 0;
-    const onMove = (e) => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        const nx = e.clientX / window.innerWidth - 0.5;
-        const ny = e.clientY / window.innerHeight - 0.5;
-        el.style.setProperty('--px', nx.toFixed(3));
-        el.style.setProperty('--py', ny.toFixed(3));
-        raf = 0;
-      });
-    };
-
-    window.addEventListener('mousemove', onMove, { passive: true });
-    return () => {
-      window.removeEventListener('mousemove', onMove);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, [ref]);
+function useParallax() {
+  // Disabled mouse parallax to prevent continuous rendering recalculations on mousemove
 }
 
 function Hero() {

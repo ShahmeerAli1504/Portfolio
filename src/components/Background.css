@@ -19,60 +19,34 @@
   box-shadow: 0 0 80px 6px var(--glow);
 }
 
-/* Aurora ribbons — huge blurred conic gradients, slowly counter-rotating */
+/* Aurora ribbons — soft static gradient ambient background without continuous heavy blur/spin */
 .bg-aurora {
   position: absolute;
   left: 50%;
-  top: -50vh;
-  width: 120vmax;
-  aspect-ratio: 1;
-  margin-left: -60vmax;
+  top: -20vh;
+  width: 100vw;
+  height: 60vh;
+  transform: translateX(-50%);
   border-radius: 50%;
-  filter: blur(24px);
-  opacity: 0.18;
-  will-change: transform;
+  opacity: 0.12;
+  pointer-events: none;
 }
 
 .bg-aurora-a {
-  background: conic-gradient(
-    from 210deg at 50% 50%,
-    transparent 0deg,
-    var(--accent-strong) 55deg,
-    transparent 110deg,
-    var(--accent-2) 200deg,
-    transparent 260deg,
-    var(--accent) 310deg,
-    transparent 360deg
+  background: radial-gradient(
+    ellipse at top,
+    var(--accent-strong) 0%,
+    var(--accent-2) 45%,
+    transparent 70%
   );
-  animation: aurora-spin 90s linear infinite;
 }
 
 .bg-aurora-b {
-  top: -60vh;
-  background: conic-gradient(
-    from 30deg at 50% 50%,
-    transparent 0deg,
-    var(--accent-2) 80deg,
-    transparent 160deg,
-    var(--accent-strong) 250deg,
-    transparent 330deg
-  );
-  opacity: 0.12;
-  animation: aurora-spin 140s linear infinite reverse;
-}
-
-@keyframes aurora-spin {
-  to {
-    transform: rotate(360deg);
-  }
+  display: none;
 }
 
 body.light .bg-aurora-a {
-  opacity: 0.1;
-}
-
-body.light .bg-aurora-b {
-  opacity: 0.07;
+  opacity: 0.06;
 }
 
 body.light .bg-horizon {
@@ -87,74 +61,11 @@ body.light .bg-horizon {
   background-size: 26px 26px;
   mask-image: radial-gradient(ellipse 100% 65% at 50% 0%, black 10%, transparent 78%);
   -webkit-mask-image: radial-gradient(ellipse 100% 65% at 50% 0%, black 10%, transparent 78%);
-  opacity: 0.5;
+  opacity: 0.3;
 }
 
-/* Meteor streaks — rare, thin, diagonal */
-.bg-meteors {
-  position: absolute;
-  inset: 0;
-}
-
+.bg-meteors,
 .bg-meteor {
-  position: absolute;
-  top: -8%;
-  width: 1px;
-  height: 110px;
-  background: linear-gradient(180deg, transparent, var(--accent), transparent);
-  transform: rotate(38deg);
-  opacity: 0;
-  animation: meteor 9s linear infinite;
-}
-
-.bg-meteor::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: -1.5px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px 2px var(--glow);
-}
-
-.bg-meteor:nth-child(1) {
-  left: 22%;
-  animation-delay: 2s;
-}
-
-.bg-meteor:nth-child(2) {
-  left: 58%;
-  height: 80px;
-  animation-delay: 6.5s;
-  animation-duration: 11s;
-}
-
-.bg-meteor:nth-child(3) {
-  left: 82%;
-  height: 130px;
-  animation-delay: 10s;
-  animation-duration: 13s;
-}
-
-@keyframes meteor {
-  0%,
-  74% {
-    opacity: 0;
-    transform: rotate(38deg) translateY(0);
-  }
-  76% {
-    opacity: 0.9;
-  }
-  88%,
-  100% {
-    opacity: 0;
-    transform: rotate(38deg) translateY(64vh);
-  }
-}
-
-body.light .bg-meteor {
   display: none;
 }
 
@@ -162,7 +73,7 @@ body.light .bg-meteor {
 .bg-spotlight {
   position: absolute;
   inset: 0;
-  opacity: 0.45;
+  opacity: 0.35;
   background: radial-gradient(
     600px circle at 50vw -10vh,
     var(--glow),
@@ -190,19 +101,4 @@ body.light .bg-spotlight {
 
 body.light .bg-grain {
   opacity: 0.035;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bg-aurora,
-  .bg-meteor {
-    animation: none;
-  }
-
-  .bg-meteor {
-    display: none;
-  }
-
-  .bg-spotlight {
-    display: none;
-  }
 }

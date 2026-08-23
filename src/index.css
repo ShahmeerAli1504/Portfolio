@@ -221,14 +221,12 @@ button {
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.15;
-  text-shadow: 0 0 40px var(--glow);
 }
 
-/* Highlighted keywords — cyan with a soft glow */
+/* Highlighted keywords — cyan */
 .glow-word {
   color: var(--accent);
   font-weight: 500;
-  text-shadow: 0 0 18px var(--glow);
 }
 
 .section-sub {
@@ -243,31 +241,28 @@ button {
    ============================================ */
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(12px);
   transition:
-    opacity var(--dur-slow) var(--ease-out),
-    transform var(--dur-slow) var(--ease-out);
+    opacity var(--dur-med) var(--ease-out),
+    transform var(--dur-med) var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
-  will-change: opacity, transform;
 }
 
 .reveal-left {
-  transform: translateX(-36px);
+  transform: translateX(-16px);
 }
 
 .reveal-right {
-  transform: translateX(36px);
+  transform: translateX(16px);
 }
 
 .reveal-scale {
-  transform: scale(0.94);
+  transform: scale(0.97);
 }
 
 .reveal.visible {
   opacity: 1;
   transform: none;
-  /* Release the compositor layer once the entrance has played */
-  will-change: auto;
 }
 
 /* ============================================
@@ -286,8 +281,6 @@ button {
   letter-spacing: 0.01em;
   border: 1px solid transparent;
   transition:
-    transform var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-med) var(--ease-out),
     background-color var(--dur-fast) ease,
     border-color var(--dur-fast) ease,
     color var(--dur-fast) ease;
@@ -302,13 +295,11 @@ button {
 .btn-primary {
   background: var(--gradient);
   color: var(--on-gradient);
-  box-shadow: 0 4px 20px var(--glow);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px var(--glow);
   color: var(--on-gradient);
+  opacity: 0.92;
 }
 
 .btn-ghost {
@@ -320,7 +311,6 @@ button {
 .btn-ghost:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-2px);
 }
 
 /* Chips / tags */

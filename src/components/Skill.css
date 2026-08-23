@@ -2,7 +2,7 @@
 .terminal {
   max-width: 860px;
   border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  background: var(--surface);
   border: 1px solid var(--border-strong);
   box-shadow: var(--shadow-card);
   overflow: hidden;
@@ -67,13 +67,6 @@
   margin-left: 3px;
   vertical-align: text-bottom;
   background: var(--accent);
-  animation: caret-blink 1.1s steps(1) infinite;
-}
-
-@keyframes caret-blink {
-  50% {
-    opacity: 0;
-  }
 }
 
 /* Output prints group-by-group once the command finishes typing */
@@ -85,14 +78,6 @@
 }
 
 .terminal-output .skill-group {
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity var(--dur-med) var(--ease-out),
-    transform var(--dur-med) var(--ease-out);
-  transition-delay: calc(var(--gi, 0) * 150ms);
-}
-
-.terminal-output.is-done .skill-group {
   opacity: 1;
   transform: none;
 }
@@ -123,8 +108,7 @@
   background: var(--surface-2);
   border: 1px solid var(--border);
   transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease,
-    background-color var(--dur-fast) ease, transform var(--dur-fast) var(--ease-out),
-    box-shadow var(--dur-fast) ease;
+    background-color var(--dur-fast) ease;
   cursor: default;
 }
 
@@ -132,8 +116,6 @@
   color: var(--accent);
   border-color: var(--accent);
   background: var(--accent-soft);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 14px var(--glow);
 }
 
 .terminal-status {
