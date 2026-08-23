@@ -88,7 +88,7 @@ function Hero() {
             <a href="#projects" className="btn btn-primary">
               View my work
             </a>
-            <a href="/Shahmeer_CV.pdf" download className="btn btn-ghost">
+            <a href="/ShahmeerAli_FullStackEngineer_CV.pdf" download="ShahmeerAli_FullStackEngineer_CV.pdf" className="btn btn-ghost">
               <DownloadIcon width={18} height={18} />
               Download CV
             </a>
@@ -135,10 +135,7 @@ function Hero() {
             <span className="hero-blob hero-blob-c" />
           </div>
           <div className="hero-portrait">
-            <picture>
-              <source srcSet="/Passportsize.webp" type="image/webp" />
-              <img src="/Passportsize.png" alt="Shahmeer Ali" width="320" height="320" />
-            </picture>
+            <img src="/21I-0466.jpg" alt="Shahmeer Ali" width="320" height="320" />
           </div>
           <div className="hero-orbit" aria-hidden="true" />
         </div>
