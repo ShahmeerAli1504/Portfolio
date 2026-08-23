@@ -40,7 +40,7 @@ const timeline = [
   {
     role: "Teacher's Assistant & Lab Demonstrator",
     company: 'FAST NUCES · Islamabad',
-    time: '2024 – 2025',
+    time: '2023 – 2025',
     desc: 'Provided academic support and tutoring in Data Structures, Operating Systems, Computer Networks, and Game Development. Assisted with grading, assessments, and student progress tracking.',
     tech: ['Data Structures', 'OS', 'Networks', 'Game Dev'],
   },
