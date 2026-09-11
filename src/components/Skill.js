@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Skill.css';
 import {
@@ -11,7 +11,11 @@ import {
   Terminal,
   Check,
   Search,
-  Zap
+  Zap,
+  ChevronLeft,
+  ChevronRight,
+  Pause,
+  Play
 } from 'lucide-react';
 
 const SKILL_CATEGORIES = [
@@ -99,18 +103,55 @@ const SKILL_CATEGORIES = [
   },
 ];
 
+const AUTO_ROTATE_MS = 10000; // 10 seconds
+
 function Skills() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeSkillBadge, setActiveSkillBadge] = useState(null);
+
+  // Carousel State
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [progressKey, setProgressKey] = useState(0);
 
   // Total skills count
   const totalSkillsCount = useMemo(() => {
     return SKILL_CATEGORIES.reduce((acc, cat) => acc + cat.skills.length, 0);
   }, []);
 
-  // Filter Categories & Skills
+  const nextSlide = useCallback(() => {
+    setCarouselIndex((prev) => (prev + 1) % SKILL_CATEGORIES.length);
+    setProgressKey((k) => k + 1);
+  }, []);
+
+  const prevSlide = useCallback(() => {
+    setCarouselIndex((prev) => (prev - 1 + SKILL_CATEGORIES.length) % SKILL_CATEGORIES.length);
+    setProgressKey((k) => k + 1);
+  }, []);
+
+  // Self Auto-Rotation Timer (10 Seconds)
+  useEffect(() => {
+    if (isPaused || activeCategory !== 'all' || searchQuery.trim() !== '') return undefined;
+    const interval = setInterval(() => {
+      nextSlide();
+    }, AUTO_ROTATE_MS);
+    return () => clearInterval(interval);
+  }, [isPaused, activeCategory, searchQuery, nextSlide]);
+
+  // Compute 3 visible categories for carousel mode
+  const visibleCarouselCategories = useMemo(() => {
+    if (activeCategory !== 'all' || searchQuery.trim() !== '') return null;
+    return [0, 1, 2].map(
+      (offset) => SKILL_CATEGORIES[(carouselIndex + offset) % SKILL_CATEGORIES.length]
+    );
+  }, [carouselIndex, activeCategory, searchQuery]);
+
+  // Filter Categories & Skills when user searches or clicks filter tabs
   const filteredCategories = useMemo(() => {
+    if (activeCategory === 'all' && !searchQuery.trim()) {
+      return visibleCarouselCategories;
+    }
     return SKILL_CATEGORIES.map((cat) => {
       if (activeCategory !== 'all' && cat.id !== activeCategory) {
         return null;
@@ -127,7 +168,9 @@ function Skills() {
       if (matchingSkills.length === 0) return null;
       return { ...cat, skills: matchingSkills };
     }).filter(Boolean);
-  }, [activeCategory, searchQuery]);
+  }, [activeCategory, searchQuery, visibleCarouselCategories]);
+
+  const isCarouselActive = activeCategory === 'all' && !searchQuery.trim();
 
   return (
     <section id="skills" className="sp-skills-section">
@@ -147,7 +190,7 @@ function Skills() {
           </p>
         </div>
 
-        {/* Terminal Quick Stats Banner */}
+        {/* Terminal Quick Stats & Carousel Timer Banner */}
         <div className="sp-skills-terminal-banner">
           <div className="sp-sterm-head">
             <div className="sp-sterm-dots">
@@ -155,21 +198,40 @@ function Skills() {
               <span className="dot yellow" />
               <span className="dot green" />
             </div>
-            <span className="sp-sterm-path">shahmeer@sys:~$ ./query-stack --count --status</span>
+            <span className="sp-sterm-path">
+              shahmeer@sys:~$ ./query-stack --carousel --rotate=10s
+            </span>
           </div>
 
           <div className="sp-sterm-body">
             <div className="sp-sterm-line">
               <Terminal size={14} className="sp-sterm-icon" />
               <span>
-                <strong className="sp-text-cyan">{totalSkillsCount}</strong> Verified Production Technologies Initialized across <strong>5 Engineering Domains</strong>.
+                <strong className="sp-text-cyan">{totalSkillsCount}</strong> Verified Production Technologies across <strong>5 Domains</strong>.
               </span>
             </div>
+
+            {isCarouselActive && (
+              <div className="sp-sterm-timer-status">
+                <span className="sp-timer-badge">
+                  {isPaused ? <Pause size={12} className="sp-icon-amber" /> : <Play size={12} className="sp-icon-cyan" />}
+                  <span>{isPaused ? 'Auto-Rotation Paused (Hovering)' : 'Rotating 3 of 5 domains (10s)'}</span>
+                </span>
+              </div>
+            )}
+
             <div className="sp-sterm-status">
               <Check size={13} className="sp-icon-emerald" />
-              <span>SYS_READY // Zero Dependency Vulnerabilities</span>
+              <span>SYS_READY // Zero Vulnerabilities</span>
             </div>
           </div>
+
+          {/* 10-Second Progress Line Animation */}
+          {isCarouselActive && !isPaused && (
+            <div className="sp-carousel-progress-bar">
+              <div key={progressKey} className="sp-carousel-progress-fill" />
+            </div>
+          )}
         </div>
 
         {/* Controls: Search Bar + Category Tabs */}
@@ -200,7 +262,7 @@ function Skills() {
               onClick={() => setActiveCategory('all')}
               className={`sp-stab-btn ${activeCategory === 'all' ? 'active' : ''}`}
             >
-              <span>All Stack</span>
+              <span>Carousel (3 at a time)</span>
               <span className="sp-stab-count">{totalSkillsCount}</span>
             </button>
 
@@ -217,75 +279,136 @@ function Skills() {
           </div>
         </div>
 
-        {/* Skills Cards Grid */}
-        <AnimatePresence mode="wait">
-          {filteredCategories.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="sp-skills-empty"
-            >
-              <Zap size={24} className="sp-icon-amber" />
-              <p>No tools matched &quot;{searchQuery}&quot;</p>
-              <button onClick={() => { setSearchQuery(''); setActiveCategory('all'); }} className="sp-reset-search-btn">
-                Reset Matrix Filter
-              </button>
-            </motion.div>
-          ) : (
-            <motion.div
-              key={`${activeCategory}-${searchQuery}`}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.25 }}
-              className="sp-skills-grid"
-            >
-              {filteredCategories.map((cat) => {
-                const Icon = cat.icon;
-                return (
-                  <div key={cat.id} className={`sp-skill-card ${cat.colorClass}`}>
-                    {/* Card Header */}
-                    <div className="sp-scard-header">
-                      <div className="sp-scard-title-group">
-                        <div className="sp-scard-icon-box">
-                          <Icon size={18} />
-                        </div>
-                        <div>
-                          <h3 className="sp-scard-title">{cat.title}</h3>
-                          <p className="sp-scard-desc">{cat.description}</p>
-                        </div>
-                      </div>
-                      <span className="sp-scard-count">{cat.skills.length} Tools</span>
-                    </div>
+        {/* Carousel Navigation Header Bar */}
+        {isCarouselActive && (
+          <div className="sp-carousel-nav-bar">
+            <div className="sp-cnav-left">
+              <span className="sp-cnav-label">Domains Showing:</span>
+              <span className="sp-cnav-range">
+                Category {carouselIndex + 1}, {(carouselIndex + 1) % 5 + 1}, and {(carouselIndex + 2) % 5 + 1} of 5
+              </span>
+            </div>
 
-                    {/* Skill Chips List */}
-                    <div className="sp-scard-chips">
-                      {cat.skills.map((skill) => {
-                        const isHighlighted = activeSkillBadge === skill.name;
-                        return (
-                          <div
-                            key={skill.name}
-                            onClick={() => setActiveSkillBadge(isHighlighted ? null : skill.name)}
-                            className={`sp-schip ${isHighlighted ? 'highlighted' : ''}`}
-                          >
-                            <span className="sp-schip-name">{skill.name}</span>
-                            <span className="sp-schip-level">{skill.type}</span>
+            {/* Pagination Indicator Dots */}
+            <div className="sp-carousel-dots">
+              {SKILL_CATEGORIES.map((cat, idx) => (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    setCarouselIndex(idx);
+                    setProgressKey((k) => k + 1);
+                  }}
+                  className={`sp-cdot ${carouselIndex === idx ? 'active' : ''}`}
+                  title={`Jump to ${cat.title}`}
+                />
+              ))}
+            </div>
+
+            {/* Prev / Next Buttons */}
+            <div className="sp-carousel-arrow-buttons">
+              <button
+                onClick={prevSlide}
+                className="sp-carrow-btn"
+                title="Previous Domain"
+              >
+                <ChevronLeft size={16} />
+              </button>
+              <button
+                onClick={nextSlide}
+                className="sp-carrow-btn"
+                title="Next Domain"
+              >
+                <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Skills Cards Grid / Carousel View */}
+        <div
+          className="sp-carousel-wrapper"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <AnimatePresence mode="wait">
+            {!filteredCategories || filteredCategories.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="sp-skills-empty"
+              >
+                <Zap size={24} className="sp-icon-amber" />
+                <p>No tools matched &quot;{searchQuery}&quot;</p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setActiveCategory('all');
+                  }}
+                  className="sp-reset-search-btn"
+                >
+                  Reset Matrix Filter
+                </button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key={isCarouselActive ? carouselIndex : `${activeCategory}-${searchQuery}`}
+                initial={{ opacity: 0, x: isCarouselActive ? 20 : 0 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: isCarouselActive ? -20 : 0 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="sp-skills-grid sp-skills-carousel-grid"
+              >
+                {filteredCategories.map((cat) => {
+                  const Icon = cat.icon;
+                  return (
+                    <div key={cat.id} className={`sp-skill-card ${cat.colorClass}`}>
+                      {/* Card Header */}
+                      <div className="sp-scard-header">
+                        <div className="sp-scard-title-group">
+                          <div className="sp-scard-icon-box">
+                            <Icon size={18} />
                           </div>
-                        );
-                      })}
+                          <div>
+                            <h3 className="sp-scard-title">{cat.title}</h3>
+                            <p className="sp-scard-desc">{cat.description}</p>
+                          </div>
+                        </div>
+                        <span className="sp-scard-count">{cat.skills.length} Tools</span>
+                      </div>
+
+                      {/* Skill Chips List */}
+                      <div className="sp-scard-chips">
+                        {cat.skills.map((skill) => {
+                          const isHighlighted = activeSkillBadge === skill.name;
+                          return (
+                            <div
+                              key={skill.name}
+                              onClick={() =>
+                                setActiveSkillBadge(isHighlighted ? null : skill.name)
+                              }
+                              className={`sp-schip ${isHighlighted ? 'highlighted' : ''}`}
+                            >
+                              <span className="sp-schip-name">{skill.name}</span>
+                              <span className="sp-schip-level">{skill.type}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </motion.div>
-          )}
-        </AnimatePresence>
+                  );
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* Matrix Footer Note */}
         <div className="sp-skills-footer">
           <Sparkles size={14} className="sp-icon-cyan" />
-          <span>Continuous Integration &amp; Active Expansion: Constantly testing emerging AI orchestration frameworks, edge computing patterns, and systems optimization tools.</span>
+          <span>
+            Continuous Integration &amp; Active Expansion: Constantly testing emerging AI orchestration frameworks, edge computing patterns, and systems optimization tools. Auto-rotates every 10 seconds.
+          </span>
         </div>
       </div>
     </section>

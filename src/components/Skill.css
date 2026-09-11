@@ -67,6 +67,7 @@
   overflow: hidden;
   margin-bottom: 32px;
   box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  position: relative;
 }
 
 .sp-sterm-head {
@@ -122,6 +123,24 @@
   color: #22d3ee;
 }
 
+.sp-sterm-timer-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sp-timer-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #67e8f9;
+  background: rgba(6, 182, 212, 0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
 .sp-sterm-status {
   display: flex;
   align-items: center;
@@ -138,12 +157,33 @@
   color: #67e8f9;
 }
 
+/* 10-Second Progress Line Animation */
+.sp-carousel-progress-bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+  position: relative;
+}
+
+.sp-carousel-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22d3ee, #a855f7);
+  width: 0%;
+  animation: spRotateProgress 10s linear forwards;
+}
+
+@keyframes spRotateProgress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
 /* Controls: Search & Tabs */
 .sp-skills-controls {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .sp-skills-search-box {
@@ -248,12 +288,95 @@
   color: #000000;
 }
 
-/* Skills Cards Grid */
+/* Carousel Navigation Bar */
+.sp-carousel-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: rgba(14, 16, 24, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+}
+
+.sp-cnav-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #a1a1aa;
+}
+
+.sp-cnav-range {
+  color: #67e8f9;
+  font-weight: 600;
+}
+
+.sp-carousel-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sp-cdot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.sp-cdot:hover {
+  background: rgba(34, 211, 238, 0.5);
+}
+
+.sp-cdot.active {
+  background: #22d3ee;
+  border-color: #67e8f9;
+  box-shadow: 0 0 10px rgba(34, 211, 238, 0.6);
+  transform: scale(1.2);
+}
+
+.sp-carousel-arrow-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sp-carrow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #d4d4d8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sp-carrow-btn:hover {
+  color: #22d3ee;
+  background: rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.4);
+}
+
+/* Skills Cards Grid & Carousel Grid */
 .sp-skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: 24px;
   margin-bottom: 32px;
+}
+
+.sp-skills-carousel-grid {
+  grid-template-columns: repeat(3, 1fr) !important;
 }
 
 .sp-skill-card {
@@ -314,7 +437,7 @@
 
 .sp-scard-title {
   font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: #ffffff;
   margin: 0 0 4px 0;
@@ -322,7 +445,7 @@
 
 .sp-scard-desc {
   font-family: 'Inter', system-ui, sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   color: #a1a1aa;
   line-height: 1.4;
   margin: 0;
@@ -351,8 +474,8 @@
   align-items: center;
   gap: 6px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.78rem;
-  padding: 6px 12px;
+  font-size: 0.76rem;
+  padding: 5px 10px;
   border-radius: 8px;
   background: rgba(20, 23, 34, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -443,13 +566,25 @@
 .sp-icon-emerald { color: #10b981; flex-shrink: 0; }
 .sp-icon-amber { color: #f59e0b; flex-shrink: 0; }
 
+@media (max-width: 1024px) {
+  .sp-skills-carousel-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
 @media (max-width: 768px) {
-  .sp-skills-grid {
-    grid-template-columns: 1fr;
+  .sp-skills-carousel-grid {
+    grid-template-columns: 1fr !important;
   }
 
   .sp-sterm-body {
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .sp-carousel-nav-bar {
+    flex-direction: column;
+    gap: 12px;
     align-items: flex-start;
   }
 }
