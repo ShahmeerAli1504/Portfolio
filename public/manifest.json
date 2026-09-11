@@ -1,6 +1,7 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Shahmeer Portfolio",
+  "name": "Shahmeer Ali — Full-Stack & AI Systems Engineer Portfolio",
+  "description": "Portfolio of Shahmeer Ali - Software Engineer & Systems Architect",
   "icons": [
     {
       "src": "favicon.ico",
@@ -18,8 +19,8 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "theme_color": "#090a0f",
+  "background_color": "#090a0f"
 }

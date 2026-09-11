@@ -3,48 +3,108 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#09090b" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="theme-color" content="#090a0f" />
+
+    <!-- Primary Meta Tags -->
+    <title>Shahmeer Ali | Full-Stack & AI Systems Engineer</title>
+    <meta name="title" content="Shahmeer Ali | Full-Stack & AI Systems Engineer" />
     <meta
       name="description"
-      content="Shahmeer Ali — Software Engineer. Frontend & MERN developer working across cloud core networks, distributed systems, AI and AR."
+      content="Shahmeer Ali — Full-Stack & AI Systems Engineer. Specializing in high-performance distributed systems, scalable React/Node applications, and AI orchestration."
     />
+    <meta
+      name="keywords"
+      content="Shahmeer Ali, Software Engineer, Full-Stack Engineer, AI Systems Architect, React, Node.js, Python, MERN, Portfolio, System Architect"
+    />
+    <meta name="author" content="Shahmeer Ali" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical Link -->
+    <link rel="canonical" href="https://shahmeerali.dev/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://shahmeerali.dev/" />
+    <meta property="og:title" content="Shahmeer Ali | Full-Stack & AI Systems Engineer" />
+    <meta
+      property="og:description"
+      content="Full-Stack & AI Systems Engineer building high-performance scalable web applications and intelligent infrastructure."
+    />
+    <meta property="og:image" content="%PUBLIC_URL%/logo512.png" />
+    <meta property="og:site_name" content="Shahmeer Ali Portfolio" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://shahmeerali.dev/" />
+    <meta name="twitter:title" content="Shahmeer Ali | Full-Stack & AI Systems Engineer" />
+    <meta
+      name="twitter:description"
+      content="Full-Stack & AI Systems Engineer building high-performance scalable web applications and intelligent infrastructure."
+    />
+    <meta name="twitter:image" content="%PUBLIC_URL%/logo512.png" />
+
+    <!-- Apple Touch Icon & Web Manifest -->
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+    <!-- Preconnect & Asynchronous Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Async font CSS: doesn't block first paint; swaps in when ready -->
     <link
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
       media="print"
       onload="this.media='all'"
     />
     <noscript>
       <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
         rel="stylesheet"
       />
     </noscript>
+
+    <!-- Pre-hydration Theme Script -->
     <script>
       (function() {
-        var saved = localStorage.getItem('theme');
-        if (saved === 'light') {
-          document.documentElement.classList.add('light');
-        } else {
-          document.documentElement.classList.add('dark');
-        }
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'light') {
+            document.documentElement.classList.add('light');
+          } else {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
       })();
     </script>
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Shahmeer Ali | Software Engineer</title>
+
+    <!-- Structured Data / JSON-LD -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Shahmeer Ali",
+        "url": "https://shahmeerali.dev/",
+        "image": "https://shahmeerali.dev/logo512.png",
+        "jobTitle": "Full-Stack & AI Systems Engineer",
+        "worksFor": {
+          "@type": "Organization",
+          "name": "Independent Systems & AI Engineering"
+        },
+        "sameAs": [
+          "https://github.com/ShahmeerAli1504",
+          "https://www.linkedin.com/in/shahmeer-ali1504/"
+        ]
+      }
+    </script>
   </head>
   <body class="dark">
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <noscript>You need to enable JavaScript to view Shahmeer Ali's portfolio.</noscript>
     <div id="root"></div>
   </body>
 </html>
