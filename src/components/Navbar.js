@@ -12,7 +12,7 @@ const PERSONAL_DATA = {
 
 const NAV_LINKS = [
   { id: 'home', label: 'Home' },
-  { id: 'about', label: 'About' },
+  { id: 'bento', label: 'Capabilities' },
   { id: 'experience', label: 'Experience' },
   { id: 'projects', label: 'Projects' },
   { id: 'skills', label: 'Skills' },
