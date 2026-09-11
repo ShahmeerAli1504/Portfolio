@@ -1,8 +1,16 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Navbar.css';
-import { SunIcon, MoonIcon, MenuIcon, CloseIcon } from './Icons';
+import { Download, Copy, Check, Menu, X, Calendar } from 'lucide-react';
 
-const LINKS = [
+const PERSONAL_DATA = {
+  name: 'Shahmeer Ali',
+  role: 'Full-Stack & Cloud Core Systems',
+  email: 'shahmeerali1504@gmail.com',
+  cvPath: '/ShahmeerAli_FullStackEngineer_CV.pdf',
+  avatarPath: '/21I-0466.jpg',
+};
+
+const NAV_LINKS = [
   { id: 'home', label: 'Home' },
   { id: 'about', label: 'About' },
   { id: 'experience', label: 'Experience' },
@@ -12,52 +20,21 @@ const LINKS = [
 ];
 
 function Navbar() {
-  const [darkMode, setDarkMode] = useState(() => {
-    const saved = localStorage.getItem('theme');
-    if (saved) return saved === 'dark';
-    return true;
-  });
   const [scrolled, setScrolled] = useState(false);
-  const [activeId, setActiveId] = useState('home');
   const [menuOpen, setMenuOpen] = useState(false);
-  const progressRef = useRef(null);
+  const [copied, setCopied] = useState(false);
+  const [activeId, setActiveId] = useState('home');
 
   useEffect(() => {
-    document.body.classList.toggle('dark', darkMode);
-    document.body.classList.toggle('light', !darkMode);
-    localStorage.setItem('theme', darkMode ? 'dark' : 'light');
-  }, [darkMode]);
-
-  // Scroll state: glass background + reading progress (direct DOM transform for 60fps scroll)
-  useEffect(() => {
-    let ticking = false;
-    let isScrolled = false;
-    const onScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = window.scrollY;
-        const nextScrolled = y > 12;
-        if (nextScrolled !== isScrolled) {
-          isScrolled = nextScrolled;
-          setScrolled(nextScrolled);
-        }
-        const max = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = max > 0 ? Math.min(y / max, 1) : 0;
-        if (progressRef.current) {
-          progressRef.current.style.transform = `scaleX(${progress})`;
-        }
-        ticking = false;
-      });
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
     };
-    onScroll();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Scroll-spy: highlight the section in view
   useEffect(() => {
-    const sections = LINKS.map(({ id }) => document.getElementById(id)).filter(Boolean);
+    const sections = NAV_LINKS.map(({ id }) => document.getElementById(id)).filter(Boolean);
     if (!sections.length || !('IntersectionObserver' in window)) return undefined;
 
     const observer = new IntersectionObserver(
@@ -72,32 +49,50 @@ function Navbar() {
     return () => observer.disconnect();
   }, []);
 
-  // Lock body scroll while the mobile menu is open
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [menuOpen]);
-
-  const closeMenu = useCallback(() => setMenuOpen(false), []);
+  const handleCopyEmail = async () => {
+    try {
+      await navigator.clipboard.writeText(PERSONAL_DATA.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch (err) {
+      console.error('Failed to copy email:', err);
+    }
+  };
 
   return (
-    <header className={`navbar ${scrolled ? 'navbar-scrolled' : ''}`}>
-      <div className="navbar-inner">
-        <a href="#home" className="logo" onClick={closeMenu}>
-          <span className="logo-mark">SA</span>
-          <span className="logo-name">Shahmeer Ali</span>
+    <header className={`sp-navbar ${scrolled ? 'sp-navbar-scrolled' : ''}`}>
+      <div className="sp-navbar-container">
+        {/* Brand Area with User Picture */}
+        <a href="#home" className="sp-brand" onClick={() => setMenuOpen(false)}>
+          <div className="sp-avatar-wrapper">
+            <img
+              src={PERSONAL_DATA.avatarPath}
+              alt={PERSONAL_DATA.name}
+              className="sp-avatar-img"
+            />
+            <span className="sp-avatar-online-dot" />
+          </div>
+          <div className="sp-brand-text">
+            <div className="sp-brand-header">
+              <span className="sp-brand-name">{PERSONAL_DATA.name}</span>
+              <span className="sp-sys-badge">
+                <span className="sp-sys-dot-ping" />
+                <span className="sp-sys-dot" />
+                SYS_ONLINE
+              </span>
+            </div>
+            <span className="sp-brand-role">{PERSONAL_DATA.role}</span>
+          </div>
         </a>
 
-        <nav aria-label="Primary">
-          <ul className="nav-links">
-            {LINKS.map(({ id, label }) => (
+        {/* Center Pill Navigation */}
+        <nav className="sp-nav-desktop" aria-label="Primary">
+          <ul className="sp-nav-pill">
+            {NAV_LINKS.map(({ id, label }) => (
               <li key={id}>
                 <a
                   href={`#${id}`}
-                  className={activeId === id ? 'active' : ''}
-                  aria-current={activeId === id ? 'true' : undefined}
+                  className={`sp-nav-link ${activeId === id ? 'active' : ''}`}
                 >
                   {label}
                 </a>
@@ -106,48 +101,113 @@ function Navbar() {
           </ul>
         </nav>
 
-        <div className="nav-actions">
+        {/* Right CTA Actions */}
+        <div className="sp-actions-desktop">
           <button
-            className="icon-btn mode-toggle"
-            onClick={() => setDarkMode(!darkMode)}
-            aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            onClick={handleCopyEmail}
+            className="sp-btn sp-btn-secondary"
+            title="Copy email to clipboard"
           >
-            <span className={`toggle-icons ${darkMode ? 'is-dark' : 'is-light'}`}>
-              <SunIcon className="toggle-sun" />
-              <MoonIcon className="toggle-moon" />
-            </span>
+            {copied ? (
+              <>
+                <Check size={14} className="sp-icon-success" />
+                <span className="sp-text-success">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Copy size={14} />
+                <span>Copy Email</span>
+              </>
+            )}
           </button>
 
-          <button
-            className="icon-btn menu-toggle"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-            aria-expanded={menuOpen}
+          <a
+            href={PERSONAL_DATA.cvPath}
+            download="ShahmeerAli_FullStackEngineer_CV.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="sp-btn sp-btn-secondary"
           >
-            {menuOpen ? <CloseIcon /> : <MenuIcon />}
-          </button>
+            <Download size={14} className="sp-icon-cyan" />
+            <span>Resume PDF</span>
+          </a>
+
+          <a href="#contact" className="sp-btn sp-btn-primary">
+            <Calendar size={14} />
+            <span>Consultation</span>
+          </a>
         </div>
+
+        {/* Mobile Toggle */}
+        <button
+          className="sp-menu-toggle"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+        >
+          {menuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
       </div>
 
-      <div className="scroll-progress" ref={progressRef} />
+      {/* Mobile Drawer */}
+      {menuOpen && (
+        <div className="sp-mobile-drawer">
+          <ul className="sp-mobile-links">
+            {NAV_LINKS.map(({ id, label }) => (
+              <li key={id}>
+                <a
+                  href={`#${id}`}
+                  className={activeId === id ? 'active' : ''}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
 
-      {/* Mobile drawer */}
-      <div className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
-        <ul>
-          {LINKS.map(({ id, label }, i) => (
-            <li key={id} style={{ '--i': i }}>
-              <a
-                href={`#${id}`}
-                className={activeId === id ? 'active' : ''}
-                onClick={closeMenu}
-              >
-                <span className="mobile-menu-index">0{i + 1}</span>
-                {label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+          <div className="sp-mobile-actions">
+            <button
+              onClick={() => {
+                handleCopyEmail();
+                setMenuOpen(false);
+              }}
+              className="sp-btn sp-btn-secondary sp-btn-full"
+            >
+              {copied ? (
+                <span className="sp-text-success flex items-center gap-1">
+                  <Check size={14} /> Copied!
+                </span>
+              ) : (
+                <>
+                  <Copy size={14} />
+                  <span>Copy Email</span>
+                </>
+              )}
+            </button>
+
+            <a
+              href={PERSONAL_DATA.cvPath}
+              download="ShahmeerAli_FullStackEngineer_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={() => setMenuOpen(false)}
+              className="sp-btn sp-btn-secondary sp-btn-full"
+            >
+              <Download size={14} className="sp-icon-cyan" />
+              <span>Download CV (PDF)</span>
+            </a>
+
+            <a
+              href="#contact"
+              onClick={() => setMenuOpen(false)}
+              className="sp-btn sp-btn-primary sp-btn-full"
+            >
+              <Calendar size={14} />
+              <span>Schedule Consultation</span>
+            </a>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
