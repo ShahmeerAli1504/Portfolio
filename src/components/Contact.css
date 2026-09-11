@@ -498,11 +498,26 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
+  .sp-contact-section {
+    padding: 64px 0;
+  }
+
+  .sp-contact-container {
+    padding: 0 16px;
+  }
+
   .sp-form-row {
     grid-template-columns: 1fr;
   }
+
   .sp-submit-btn {
     width: 100%;
   }
+
+  .sp-form-group input,
+  .sp-form-group textarea {
+    font-size: 16px;
+  }
 }
+

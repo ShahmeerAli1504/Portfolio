@@ -319,3 +319,22 @@
     display: block;
   }
 }
+
+@media (max-width: 480px) {
+  .sp-navbar-container {
+    padding: 0 16px;
+  }
+
+  .sp-sys-badge {
+    display: none;
+  }
+
+  .sp-brand-name {
+    font-size: 0.82rem;
+  }
+
+  .sp-brand-role {
+    font-size: 0.65rem;
+  }
+}
+

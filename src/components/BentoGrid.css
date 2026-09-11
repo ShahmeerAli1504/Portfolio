@@ -444,3 +444,27 @@
     grid-column: span 1;
   }
 }
+
+@media (max-width: 640px) {
+  .sp-bento-section {
+    padding: 64px 0;
+  }
+
+  .sp-bento-container {
+    padding: 0 16px;
+  }
+
+  .sp-bento-card {
+    padding: 20px 16px;
+  }
+
+  .sp-card-footer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sp-term-screen {
+    padding: 14px 12px;
+    max-height: 320px;
+  }
+}
+

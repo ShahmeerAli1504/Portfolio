@@ -600,3 +600,56 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 640px) {
+  .sp-projects-section {
+    padding: 64px 0;
+  }
+
+  .sp-projects-container {
+    padding: 0 16px;
+  }
+
+  .sp-pagination-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sp-page-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .sp-whitepaper-card {
+    padding: 20px 16px;
+  }
+
+  .sp-wp-metrics-strip {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .sp-modal-overlay {
+    padding: 16px 12px;
+  }
+
+  .sp-modal-container {
+    padding: 20px 16px;
+    max-height: 90vh;
+    border-radius: 14px;
+  }
+
+  .sp-modal-title {
+    font-size: 1.4rem;
+  }
+
+  .sp-gallery-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sp-modal-footer {
+    flex-wrap: wrap;
+  }
+}
+

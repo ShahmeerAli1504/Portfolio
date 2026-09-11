@@ -499,3 +499,44 @@
     grid-column: span 1;
   }
 }
+
+@media (max-width: 640px) {
+  .sp-exp-section {
+    padding: 64px 0;
+  }
+
+  .sp-exp-container {
+    padding: 0 16px;
+  }
+
+  .sp-timeline-wrapper {
+    padding-left: 20px;
+  }
+
+  .sp-timeline-beam {
+    left: 4px;
+  }
+
+  .sp-timeline-node {
+    left: -20px;
+  }
+
+  .sp-exp-card {
+    padding: 18px 14px;
+  }
+
+  .sp-exp-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .sp-meta-col {
+    align-items: flex-start;
+  }
+
+  .sp-sidebar-card {
+    padding: 18px 14px;
+  }
+}
+

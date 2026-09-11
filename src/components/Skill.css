@@ -588,3 +588,32 @@
     align-items: flex-start;
   }
 }
+
+@media (max-width: 640px) {
+  .sp-skills-section {
+    padding: 64px 0;
+  }
+
+  .sp-skills-container {
+    padding: 0 16px;
+  }
+
+  .sp-skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sp-skill-card {
+    padding: 18px 14px;
+  }
+
+  .sp-carousel-dots {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .sp-cnav-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
