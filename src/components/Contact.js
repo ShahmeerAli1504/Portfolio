@@ -40,9 +40,16 @@ const channels = [
   },
 ];
 
+// Strict RFC 5322 Compliant Email Validation Regex
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 function Contact() {
   const form = useRef();
   const [copied, setCopied] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [emailError, setEmailError] = useState('');
+
   const [formStatus, setFormStatus] = useState({
     submitting: false,
     submitted: false,
@@ -55,6 +62,31 @@ function Contact() {
     const timer = setTimeout(() => setCopied(false), 2400);
     return () => clearTimeout(timer);
   }, [copied]);
+
+  // Real-time email format validation
+  const validateEmailStr = (val) => {
+    const trimmed = val.trim();
+    if (!trimmed) {
+      return 'Email address is required.';
+    }
+    if (!EMAIL_REGEX.test(trimmed)) {
+      return 'Please enter a valid email address (e.g., name@domain.com).';
+    }
+    return '';
+  };
+
+  const handleEmailChange = (e) => {
+    const val = e.target.value;
+    setEmailInput(val);
+    if (emailTouched) {
+      setEmailError(validateEmailStr(val));
+    }
+  };
+
+  const handleEmailBlur = () => {
+    setEmailTouched(true);
+    setEmailError(validateEmailStr(emailInput));
+  };
 
   const copyEmail = async (e) => {
     e.preventDefault();
@@ -75,6 +107,21 @@ function Contact() {
 
   const sendEmail = (e) => {
     e.preventDefault();
+
+    // Strict validation check before submission
+    const err = validateEmailStr(emailInput);
+    if (err) {
+      setEmailTouched(true);
+      setEmailError(err);
+      setFormStatus({
+        submitting: false,
+        submitted: false,
+        error: true,
+        message: err,
+      });
+      return;
+    }
+
     setFormStatus({ submitting: true, submitted: false, error: false, message: '' });
 
     // EXACT EmailJS Credentials (DO NOT ALTER)
@@ -91,6 +138,9 @@ function Contact() {
           error: false,
           message: "Thank you! Your message has been sent successfully. I will get back to you shortly.",
         });
+        setEmailInput('');
+        setEmailTouched(false);
+        setEmailError('');
         if (form.current) {
           form.current.reset();
         }
@@ -210,7 +260,7 @@ function Contact() {
                   </button>
                 </div>
               ) : (
-                <form ref={form} className="sp-contact-form" onSubmit={sendEmail}>
+                <form ref={form} className="sp-contact-form" onSubmit={sendEmail} noValidate>
                   <div className="sp-form-row">
                     <div className="sp-form-group">
                       <label htmlFor="user_name">YOUR NAME</label>
@@ -225,15 +275,22 @@ function Contact() {
                     </div>
 
                     <div className="sp-form-group">
-                      <label htmlFor="user_email">EMAIL ADDRESS</label>
+                      <label htmlFor="user_email">
+                        EMAIL ADDRESS <span className="required-asterisk">*</span>
+                      </label>
                       <input
                         id="user_email"
                         name="user_email"
                         type="email"
+                        value={emailInput}
+                        onChange={handleEmailChange}
+                        onBlur={handleEmailBlur}
                         placeholder="john@example.com"
                         autoComplete="email"
+                        className={emailError ? 'input-error' : ''}
                         required
                       />
+                      {emailError && <span className="sp-field-error-msg">{emailError}</span>}
                     </div>
                   </div>
 
