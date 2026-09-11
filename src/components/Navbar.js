@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
-import { Download, Copy, Check, Menu, X, Calendar } from 'lucide-react';
+import { Download, Menu, X, Calendar } from 'lucide-react';
 
 const PERSONAL_DATA = {
   name: 'Shahmeer Ali',
@@ -22,7 +22,6 @@ const NAV_LINKS = [
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
   const [activeId, setActiveId] = useState('home');
 
   useEffect(() => {
@@ -48,16 +47,6 @@ function Navbar() {
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
   }, []);
-
-  const handleCopyEmail = async () => {
-    try {
-      await navigator.clipboard.writeText(PERSONAL_DATA.email);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2500);
-    } catch (err) {
-      console.error('Failed to copy email:', err);
-    }
-  };
 
   return (
     <header className={`sp-navbar ${scrolled ? 'sp-navbar-scrolled' : ''}`}>
@@ -103,24 +92,6 @@ function Navbar() {
 
         {/* Right CTA Actions */}
         <div className="sp-actions-desktop">
-          <button
-            onClick={handleCopyEmail}
-            className="sp-btn sp-btn-secondary"
-            title="Copy email to clipboard"
-          >
-            {copied ? (
-              <>
-                <Check size={14} className="sp-icon-success" />
-                <span className="sp-text-success">Copied!</span>
-              </>
-            ) : (
-              <>
-                <Copy size={14} />
-                <span>Copy Email</span>
-              </>
-            )}
-          </button>
-
           <a
             href={PERSONAL_DATA.cvPath}
             download="ShahmeerAli_FullStackEngineer_CV.pdf"
@@ -166,25 +137,6 @@ function Navbar() {
           </ul>
 
           <div className="sp-mobile-actions">
-            <button
-              onClick={() => {
-                handleCopyEmail();
-                setMenuOpen(false);
-              }}
-              className="sp-btn sp-btn-secondary sp-btn-full"
-            >
-              {copied ? (
-                <span className="sp-text-success flex items-center gap-1">
-                  <Check size={14} /> Copied!
-                </span>
-              ) : (
-                <>
-                  <Copy size={14} />
-                  <span>Copy Email</span>
-                </>
-              )}
-            </button>
-
             <a
               href={PERSONAL_DATA.cvPath}
               download="ShahmeerAli_FullStackEngineer_CV.pdf"
