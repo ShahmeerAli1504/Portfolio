@@ -1,149 +1,141 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import './Hero.css';
-import {
-  GitHubIcon,
-  LinkedInIcon,
-  MailIcon,
-  DownloadIcon,
-  ChevronDownIcon,
-  MapPinIcon,
-} from './Icons';
+import { ArrowRight, Calendar, Layers, ShieldCheck, Terminal, Globe, Activity, Download } from 'lucide-react';
 
-const ROLES = [
-  'Software Engineer',
-  'JavaScript Developer',
-  'Full Stack Developer',
-  'MERN Stack Developer',
-  'AR & Blockchain Enthusiast',
+const PERSONAL_DATA = {
+  name: 'Shahmeer Ali',
+  role: 'Full-Stack & Systems Engineer',
+  status: 'Available for Q4 High-Impact Contracts & Technical Leadership',
+  headline: 'Full-Stack & Systems Engineer ',
+  gradientText: 'crafting high-performance web applications & distributed architectures.',
+  subheadline:
+    'Full-stack engineer with 1.5+ years shipping production web applications across six engineering teams. Strongest in the MERN stack (React, Node, Express, MongoDB), enterprise integrations (NetSuite, Jira, KnowBe4, DOKU), and multi-agent AI platforms released via zero-downtime CI/CD.',
+  cvPath: '/ShahmeerAli_FullStackEngineer_CV.pdf',
+};
+
+const HERO_METRICS = [
+  {
+    value: '6+',
+    label: 'Engineering Teams Delivered Across',
+    detail: 'Production MERN & Full-Stack deployments',
+  },
+  {
+    value: '35%',
+    label: 'Render & Latency Speedup',
+    detail: 'React memoization & query optimization',
+  },
+  {
+    value: '< 10m',
+    label: 'Multi-Agent Workflow Time',
+    detail: 'Cut down from 4-hour manual processes',
+  },
+  {
+    value: '99.99%',
+    label: 'High Availability Focus',
+    detail: 'Enterprise-grade stability & uptime',
+  },
 ];
 
-/* Static display for name and role */
-function useScramble(ref, finalText) {
-  useEffect(() => {
-    if (ref.current) ref.current.textContent = finalText;
-  }, [ref, finalText]);
+function StatusBadge() {
+  return (
+    <div className="sp-hero-status-pill">
+      <span className="sp-status-ping-wrapper">
+        <span className="sp-status-ping" />
+        <span className="sp-status-solid" />
+      </span>
+      <Activity size={14} className="sp-status-icon" />
+      <span className="sp-status-text">{PERSONAL_DATA.status}</span>
+    </div>
+  );
 }
 
-function useTypewriter(ref, words) {
-  useEffect(() => {
-    if (ref.current) ref.current.textContent = words[0];
-  }, [ref, words]);
-}
-
-function useParallax() {
-  // Disabled mouse parallax to prevent continuous rendering recalculations on mousemove
+function StatsBar() {
+  return (
+    <div className="sp-stats-wrapper">
+      <div className="sp-stats-grid">
+        {HERO_METRICS.map((metric) => (
+          <div key={metric.label} className="sp-stat-card">
+            <div className="sp-stat-value">{metric.value}</div>
+            <div className="sp-stat-label">{metric.label}</div>
+            <div className="sp-stat-detail">{metric.detail}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function Hero() {
-  const roleRef = useRef(null);
-  const nameRef = useRef(null);
-  const visualRef = useRef(null);
-
-  useTypewriter(roleRef, ROLES);
-  useScramble(nameRef, 'Shahmeer Ali');
-  useParallax(visualRef);
-
   return (
-    <section id="home" className="hero">
-      <div className="hero-inner">
-        <div className="hero-text">
-          <a href="#contact" className="hero-badge reveal">
-            <span className="hero-badge-dot" />
-            Open to opportunities
-          </a>
+    <section id="home" className="sp-hero-section">
+      {/* Ambient Radial Background Glows */}
+      <div className="sp-hero-glow sp-hero-glow-cyan" />
+      <div className="sp-hero-glow sp-hero-glow-emerald" />
 
-          <h1 className="hero-title reveal" style={{ '--reveal-delay': '80ms' }}>
-            Hi, I'm{' '}
-            {/* The static name reserves layout space (visibility:hidden);
-                the scramble animates in an absolute overlay so the
-                randomized glyph widths never reflow the page. */}
-            <span className="hero-name">
-              <span className="sr-only">Shahmeer Ali</span>
-              <span className="hero-name-size" aria-hidden="true">
-                Shahmeer Ali
-              </span>
-              <span className="hero-name-anim" aria-hidden="true" ref={nameRef}>
-                Shahmeer Ali
-              </span>
+      <div className="sp-hero-container">
+        <div className="sp-hero-content">
+          {/* Status Pill */}
+          <div className="sp-hero-status-center">
+            <StatusBadge />
+          </div>
+
+          {/* Positioning Headline */}
+          <h1 className="sp-hero-title">
+            {PERSONAL_DATA.headline}
+            <span className="sp-hero-title-gradient">
+              {PERSONAL_DATA.gradientText}
             </span>
           </h1>
 
-          <p className="hero-role reveal" style={{ '--reveal-delay': '160ms' }}>
-            <span className="sr-only">Software Engineer</span>
-            <span className="hero-role-text" aria-hidden="true" ref={roleRef}>
-              Software Engineer
-            </span>
-            <span className="hero-caret" aria-hidden="true" />
+          {/* Sub-headline */}
+          <p className="sp-hero-description">
+            {PERSONAL_DATA.subheadline}
           </p>
 
-          <p className="hero-desc reveal" style={{ '--reveal-delay': '240ms' }}>
-            Computer Science graduate from FAST NUCES building for the web,{' '}
-            <span className="glow-word">cloud core networks</span>, and{' '}
-            <span className="glow-word">distributed systems</span> with a soft
-            spot for <span className="glow-word">AR</span> and{' '}
-            <span className="glow-word">blockchain</span>.
-          </p>
-
-          <div className="hero-buttons reveal" style={{ '--reveal-delay': '320ms' }}>
-            <a href="#projects" className="btn btn-primary">
-              View my work
-            </a>
-            <a href="/ShahmeerAli_FullStackEngineer_CV.pdf" download="ShahmeerAli_FullStackEngineer_CV.pdf" className="btn btn-ghost">
-              <DownloadIcon width={18} height={18} />
-              Download CV
-            </a>
-          </div>
-
-          <div className="hero-meta reveal" style={{ '--reveal-delay': '400ms' }}>
-            <span className="hero-location">
-              <MapPinIcon width={16} height={16} />
-              Islamabad, Pakistan
+          {/* Quick Technical Tag Chips */}
+          <div className="sp-hero-chips">
+            <span className="sp-chip sp-chip-cyan">
+              <Globe size={14} /> Full-Stack MERN &amp; Next.js
             </span>
-            <span className="hero-meta-divider" />
-            <div className="hero-socials">
-              <a
-                href="https://github.com/ShahmeerAli1504"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub profile"
-              >
-                <GitHubIcon />
-              </a>
-              <a
-                href="https://www.linkedin.com/in/shahmeer-ali1504/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn profile"
-              >
-                <LinkedInIcon />
-              </a>
-              <a href="mailto:shahmeerali1504@gmail.com" aria-label="Send email">
-                <MailIcon />
-              </a>
-            </div>
+            <span className="sp-chip sp-chip-emerald">
+              <Terminal size={14} /> Autonomous Agent Tooling
+            </span>
+            <span className="sp-chip sp-chip-teal">
+              <Layers size={14} /> Enterprise NetSuite/Jira APIs
+            </span>
+            <span className="sp-chip sp-chip-zinc">
+              <ShieldCheck size={14} /> FAST-NUCES CS Graduate
+            </span>
           </div>
-        </div>
 
-        <div
-          className="hero-visual reveal reveal-scale"
-          style={{ '--reveal-delay': '200ms' }}
-          ref={visualRef}
-        >
-          <div className="hero-mesh" aria-hidden="true">
-            <span className="hero-blob hero-blob-a" />
-            <span className="hero-blob hero-blob-b" />
-            <span className="hero-blob hero-blob-c" />
+          {/* Action CTAs */}
+          <div className="sp-hero-actions">
+            <a href="#contact" className="sp-hero-btn sp-hero-btn-primary">
+              <Calendar size={16} />
+              <span>Schedule Technical Consultation</span>
+              <ArrowRight size={16} className="sp-hero-arrow" />
+            </a>
+
+            <a href="#projects" className="sp-hero-btn sp-hero-btn-ghost">
+              <span>Explore Case Studies</span>
+            </a>
+
+            <a
+              href={PERSONAL_DATA.cvPath}
+              download="ShahmeerAli_FullStackEngineer_CV.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sp-hero-btn sp-hero-btn-ghost"
+            >
+              <Download size={16} className="sp-icon-cyan" />
+              <span>Download CV</span>
+            </a>
           </div>
-          <div className="hero-portrait">
-            <img src="/21I-0466.jpg" alt="Shahmeer Ali" width="320" height="320" />
-          </div>
-          <div className="hero-orbit" aria-hidden="true" />
+
+          {/* Metric Strip */}
+          <StatsBar />
         </div>
       </div>
-
-      <a href="#about" className="hero-scroll-cue" aria-label="Scroll to About section">
-        <ChevronDownIcon />
-      </a>
     </section>
   );
 }
