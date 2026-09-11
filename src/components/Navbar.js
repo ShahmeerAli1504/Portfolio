@@ -26,26 +26,45 @@ function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 20);
+
+      // Edge case: Top of page
+      if (scrollY < 100) {
+        setActiveId('home');
+        return;
+      }
+
+      // Edge case: Bottom of page
+      const windowHeight = window.innerHeight;
+      const docHeight = document.documentElement.scrollHeight;
+      if (windowHeight + scrollY >= docHeight - 60) {
+        setActiveId('contact');
+        return;
+      }
+
+      // Find section currently active around top-third (35%) of viewport
+      const targetY = windowHeight * 0.35;
+      let currentId = '';
+
+      for (const { id } of NAV_LINKS) {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          if (rect.top <= targetY && rect.bottom > 100) {
+            currentId = id;
+          }
+        }
+      }
+
+      if (currentId) {
+        setActiveId(currentId);
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const sections = NAV_LINKS.map(({ id }) => document.getElementById(id)).filter(Boolean);
-    if (!sections.length || !('IntersectionObserver' in window)) return undefined;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActiveId(entry.target.id);
-        });
-      },
-      { rootMargin: '-40% 0px -55% 0px' }
-    );
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
   }, []);
 
   return (
@@ -82,6 +101,7 @@ function Navbar() {
                 <a
                   href={`#${id}`}
                   className={`sp-nav-link ${activeId === id ? 'active' : ''}`}
+                  onClick={() => setActiveId(id)}
                 >
                   {label}
                 </a>
