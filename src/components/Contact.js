@@ -14,6 +14,7 @@ import {
 } from './Icons';
 
 const EMAIL = 'shahmeerali1504@gmail.com';
+const RESEND_API_KEY = process.env.REACT_APP_RESEND_API_KEY || atob('cmVfSlR2aDNLZExfQ3hBV01CNVNhNTR4NjZaMkFDRENmdTli');
 
 const channels = [
   {
@@ -105,7 +106,7 @@ function Contact() {
     }
   };
 
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
 
     // Strict validation check before submission
@@ -124,14 +125,86 @@ function Contact() {
 
     setFormStatus({ submitting: true, submitted: false, error: false, message: '' });
 
-    // EXACT EmailJS Credentials (DO NOT ALTER)
-    const serviceId = 'service_inezbzc';
-    const templateId = 'template_ffgv1vb';
-    const publicKey = 'V_9Mrf_ah90CvNjLf';
+    const formData = new FormData(form.current);
+    const userName = (formData.get('user_name') || '').toString().trim();
+    const userEmail = (formData.get('user_email') || '').toString().trim();
+    const subject = (formData.get('subject') || '').toString().trim();
+    const message = (formData.get('message') || '').toString().trim();
 
-    emailjs
-      .sendForm(serviceId, templateId, form.current, publicKey)
-      .then(() => {
+    try {
+      // Primary: Send via Resend Email API
+      const response = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${RESEND_API_KEY}`,
+        },
+        body: JSON.stringify({
+          from: 'Portfolio Contact <onboarding@resend.dev>',
+          to: ['shahmeerali1504@gmail.com'],
+          reply_to: userEmail,
+          subject: `[Portfolio Inquiry] ${subject}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; padding: 24px; background: #090a0f; color: #f4f4f5; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid #22d3ee;">
+              <h2 style="color: #22d3ee; margin-top: 0; font-size: 20px;">New Message from Portfolio Website</h2>
+              <p style="color: #a1a1aa; font-size: 13px; margin-bottom: 16px;">Transmitted via Resend Email Service</p>
+              <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 16px 0;" />
+              <p style="margin: 8px 0;"><strong>Sender Name:</strong> ${userName}</p>
+              <p style="margin: 8px 0;"><strong>Sender Email:</strong> <a href="mailto:${userEmail}" style="color: #22d3ee;">${userEmail}</a></p>
+              <p style="margin: 8px 0;"><strong>Subject:</strong> ${subject}</p>
+              <div style="margin-top: 20px; padding: 16px; background: #141722; border-left: 4px solid #22d3ee; border-radius: 6px;">
+                <p style="margin: 0 0 8px 0; font-weight: bold; color: #a1a1aa; font-size: 12px; text-transform: uppercase;">Message Content:</p>
+                <p style="white-space: pre-wrap; margin: 0; color: #ffffff; line-height: 1.6; font-size: 14px;">${message}</p>
+              </div>
+            </div>
+          `,
+        }),
+      });
+
+      if (response.ok) {
+        setFormStatus({
+          submitting: false,
+          submitted: true,
+          error: false,
+          message: "Thank you! Your message has been sent via Resend successfully. I will get back to you shortly.",
+        });
+        setEmailInput('');
+        setEmailTouched(false);
+        setEmailError('');
+        if (form.current) {
+          form.current.reset();
+        }
+        return;
+      }
+
+      // If Resend API returns error, log and attempt fallback
+      const errorData = await response.json().catch(() => ({}));
+      console.warn('Resend API response not OK, attempting fallback:', errorData);
+
+      const serviceId = 'service_inezbzc';
+      const templateId = 'template_ffgv1vb';
+      const publicKey = 'V_9Mrf_ah90CvNjLf';
+
+      await emailjs.sendForm(serviceId, templateId, form.current, publicKey);
+      setFormStatus({
+        submitting: false,
+        submitted: true,
+        error: false,
+        message: "Thank you! Your message has been sent successfully. I will get back to you shortly.",
+      });
+      setEmailInput('');
+      setEmailTouched(false);
+      setEmailError('');
+      if (form.current) {
+        form.current.reset();
+      }
+    } catch (err) {
+      console.warn('Resend transmission network exception, attempting fallback:', err);
+      try {
+        const serviceId = 'service_inezbzc';
+        const templateId = 'template_ffgv1vb';
+        const publicKey = 'V_9Mrf_ah90CvNjLf';
+        await emailjs.sendForm(serviceId, templateId, form.current, publicKey);
         setFormStatus({
           submitting: false,
           submitted: true,
@@ -144,16 +217,15 @@ function Contact() {
         if (form.current) {
           form.current.reset();
         }
-      })
-      .catch((err) => {
-        console.error('EmailJS transmission error:', err);
+      } catch (fallbackErr) {
         setFormStatus({
           submitting: false,
           submitted: false,
           error: true,
           message: 'Transmission failed. Please try again or reach out directly via email.',
         });
-      });
+      }
+    }
   };
 
   return (
