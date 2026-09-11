@@ -8,7 +8,6 @@ import {
   Server,
   TrendingUp,
   AlertTriangle,
-  Users,
   ChevronLeft,
   ChevronRight,
   X,
@@ -534,7 +533,7 @@ const PROJECTS_DATA = [
 ];
 
 const CATEGORIES = ['All Case Studies', 'Web', 'Distributed Systems', 'Systems & Infrastructure', 'AR & AI'];
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 4;
 
 function Projects() {
   const [selectedCategory, setSelectedCategory] = useState('All Case Studies');
@@ -672,15 +671,7 @@ function Projects() {
                       <span>CASE STUDY {globalIdx < 10 ? `0${globalIdx}` : globalIdx} • {project.category}</span>
                     </div>
 
-                    <div className="sp-wp-meta">
-                      {project.teamSize && (
-                        <span className="sp-wp-meta-item">
-                          <Users size={12} />
-                          {project.teamSize}
-                        </span>
-                      )}
-                      {project.role && <span className="sp-wp-role">{project.role}</span>}
-                    </div>
+                    {project.role && <span className="sp-wp-role">{project.role}</span>}
                   </div>
 
                   {/* Title & Tagline */}
@@ -689,7 +680,31 @@ function Projects() {
                     <p className="sp-wp-tagline">{project.tagline}</p>
                   </div>
 
-                  {/* Action Links (Live System & GitHub Source) */}
+                  {/* Tech Stack Chips */}
+                  <div className="sp-arch-chips">
+                    {project.architecture.slice(0, 5).map((tech) => (
+                      <span key={tech} className="sp-arch-chip">
+                        {tech}
+                      </span>
+                    ))}
+                    {project.architecture.length > 5 && (
+                      <span className="sp-arch-chip sp-arch-more">+{project.architecture.length - 5}</span>
+                    )}
+                  </div>
+
+                  {/* Metrics Strip Footnote */}
+                  {project.metrics && project.metrics.length > 0 && (
+                    <div className="sp-wp-metrics-strip">
+                      {project.metrics.map((m) => (
+                        <div key={m.label} className="sp-metric-cell">
+                          <div className="sp-metric-val">{m.value}</div>
+                          <div className="sp-metric-lbl">{m.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Action Links */}
                   <div className="sp-wp-links">
                     {project.liveUrl && (
                       <a
@@ -715,72 +730,14 @@ function Projects() {
                       </a>
                     )}
 
-                    {project.details && (
-                      <button
-                        onClick={() => setSelectedModalProject(project)}
-                        className="sp-wp-btn sp-wp-btn-outline"
-                      >
-                        <Layers size={13} />
-                        <span>Full Case Study</span>
-                      </button>
-                    )}
+                    <button
+                      onClick={() => setSelectedModalProject(project)}
+                      className="sp-wp-btn sp-wp-btn-outline"
+                    >
+                      <Layers size={13} />
+                      <span>Full Case Study</span>
+                    </button>
                   </div>
-
-                  {/* Problem Statement Box */}
-                  {project.problem && (
-                    <div className="sp-wp-problem-box">
-                      <div className="sp-problem-header">
-                        <AlertTriangle size={13} className="sp-icon-amber" />
-                        <span>Core Bottleneck &amp; Technical Friction</span>
-                      </div>
-                      <p className="sp-problem-desc">{project.problem}</p>
-                    </div>
-                  )}
-
-                  {/* Architecture & Tech Stack */}
-                  <div className="sp-wp-arch-box">
-                    <div className="sp-arch-header">
-                      <Server size={13} className="sp-icon-cyan" />
-                      <span>Architecture &amp; Stack</span>
-                    </div>
-                    <div className="sp-arch-chips">
-                      {project.architecture.map((tech) => (
-                        <span key={tech} className="sp-arch-chip">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Measurable Production Impact */}
-                  {project.impact && project.impact.length > 0 && (
-                    <div className="sp-wp-impact-box">
-                      <div className="sp-impact-header">
-                        <TrendingUp size={13} className="sp-icon-emerald" />
-                        <span>Measurable Production Impact</span>
-                      </div>
-                      <ul className="sp-impact-list">
-                        {project.impact.map((point, pIdx) => (
-                          <li key={pIdx} className="sp-impact-item">
-                            <CheckCircle2 size={14} className="sp-icon-emerald sp-impact-check" />
-                            <span>{point}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-
-                  {/* Metric Strip Footnote */}
-                  {project.metrics && project.metrics.length > 0 && (
-                    <div className="sp-wp-metrics-strip">
-                      {project.metrics.map((m) => (
-                        <div key={m.label} className="sp-metric-cell">
-                          <div className="sp-metric-val">{m.value}</div>
-                          <div className="sp-metric-lbl">{m.label}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </article>
               );
             })}
@@ -844,10 +801,50 @@ function Projects() {
               </div>
 
               <div className="sp-modal-body">
+                {selectedModalProject.problem && (
+                  <div className="sp-modal-section">
+                    <h4>
+                      <AlertTriangle size={14} className="sp-icon-amber" /> Core Challenge &amp; Bottleneck
+                    </h4>
+                    <p>{selectedModalProject.problem}</p>
+                  </div>
+                )}
+
                 <div className="sp-modal-section">
-                  <h4>Full Architecture &amp; System Overview</h4>
-                  <p>{selectedModalProject.details}</p>
+                  <h4>
+                    <Server size={14} className="sp-icon-cyan" /> Full Architecture &amp; Tech Stack
+                  </h4>
+                  <div className="sp-arch-chips">
+                    {selectedModalProject.architecture.map((tech) => (
+                      <span key={tech} className="sp-arch-chip">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
                 </div>
+
+                {selectedModalProject.impact && selectedModalProject.impact.length > 0 && (
+                  <div className="sp-modal-section">
+                    <h4>
+                      <TrendingUp size={14} className="sp-icon-emerald" /> Production Deliverables &amp; Impact
+                    </h4>
+                    <ul className="sp-impact-list">
+                      {selectedModalProject.impact.map((point, idx) => (
+                        <li key={idx} className="sp-impact-item">
+                          <CheckCircle2 size={14} className="sp-icon-emerald sp-impact-check" />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {selectedModalProject.details && (
+                  <div className="sp-modal-section">
+                    <h4>System Architecture Overview</h4>
+                    <p>{selectedModalProject.details}</p>
+                  </div>
+                )}
 
                 {selectedModalProject.images && selectedModalProject.images.length > 0 && (
                   <div className="sp-modal-gallery">
