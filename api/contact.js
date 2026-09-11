@@ -40,7 +40,7 @@ export default async function handler(req, res) {
         html: `
           <div style="font-family: Arial, sans-serif; padding: 24px; background: #090a0f; color: #f4f4f5; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid #22d3ee;">
             <h2 style="color: #22d3ee; margin-top: 0; font-size: 20px;">New Message from Portfolio Website</h2>
-            <p style="color: #a1a1aa; font-size: 13px; margin-bottom: 16px;">Transmitted via Resend Serverless API</p>
+            <p style="color: #a1a1aa; font-size: 13px; margin-bottom: 16px;">Transmitted via Portfolio Contact Form</p>
             <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 16px 0;" />
             <p style="margin: 8px 0;"><strong>Sender Name:</strong> ${user_name || 'N/A'}</p>
             <p style="margin: 8px 0;"><strong>Sender Email:</strong> <a href="mailto:${user_email}" style="color: #22d3ee;">${user_email}</a></p>

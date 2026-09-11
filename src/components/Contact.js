@@ -151,7 +151,7 @@ function Contact() {
           submitting: false,
           submitted: true,
           error: false,
-          message: "Thank you! Your message has been sent via Resend successfully. I will get back to you shortly.",
+          message: "Thank you! Your message has been sent successfully. I will get back to you shortly.",
         });
         setEmailInput('');
         setEmailTouched(false);
