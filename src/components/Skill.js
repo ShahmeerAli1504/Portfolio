@@ -7,7 +7,6 @@ import {
   Database,
   Server,
   Bot,
-  Sparkles,
   Terminal,
   Check,
   Search,
@@ -401,14 +400,6 @@ function Skills() {
               </motion.div>
             )}
           </AnimatePresence>
-        </div>
-
-        {/* Matrix Footer Note */}
-        <div className="sp-skills-footer">
-          <Sparkles size={14} className="sp-icon-cyan" />
-          <span>
-            Continuous Integration &amp; Active Expansion: Constantly testing emerging AI orchestration frameworks, edge computing patterns, and systems optimization tools. Auto-rotates every 10 seconds.
-          </span>
         </div>
       </div>
     </section>
