@@ -10,6 +10,7 @@ import {
   CheckCircleIcon,
   CopyIcon,
   ClockIcon,
+  SparklesIcon,
 } from './Icons';
 
 const EMAIL = 'shahmeerali1504@gmail.com';
@@ -26,14 +27,14 @@ const channels = [
   {
     icon: GitHubIcon,
     label: 'GitHub',
-    value: 'ShahmeerAli1504',
+    value: 'github.com/ShahmeerAli1504',
     href: 'https://github.com/ShahmeerAli1504',
     external: true,
   },
   {
     icon: LinkedInIcon,
     label: 'LinkedIn',
-    value: 'shahmeer-ali1504',
+    value: 'linkedin.com/in/shahmeer-ali1504',
     href: 'https://www.linkedin.com/in/shahmeer-ali1504/',
     external: true,
   },
@@ -49,19 +50,19 @@ function Contact() {
     message: '',
   });
 
-  // Auto-dismiss the "copied" toast
   useEffect(() => {
     if (!copied) return undefined;
-    const t = setTimeout(() => setCopied(false), 2400);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setCopied(false), 2400);
+    return () => clearTimeout(timer);
   }, [copied]);
 
-  const copyEmail = async () => {
+  const copyEmail = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     try {
       await navigator.clipboard.writeText(EMAIL);
       setCopied(true);
     } catch {
-      // Clipboard API unavailable (http / old browser) — select-less fallback
       const ta = document.createElement('textarea');
       ta.value = EMAIL;
       document.body.appendChild(ta);
@@ -74,8 +75,9 @@ function Contact() {
 
   const sendEmail = (e) => {
     e.preventDefault();
-    setFormStatus((s) => ({ ...s, submitting: true, error: false }));
+    setFormStatus({ submitting: true, submitted: false, error: false, message: '' });
 
+    // EXACT EmailJS Credentials (DO NOT ALTER)
     const serviceId = 'service_inezbzc';
     const templateId = 'template_ffgv1vb';
     const publicKey = 'V_9Mrf_ah90CvNjLf';
@@ -87,148 +89,210 @@ function Contact() {
           submitting: false,
           submitted: true,
           error: false,
-          message: "Thanks for your message! I'll get back to you soon.",
+          message: "Thank you! Your message has been sent successfully. I will get back to you shortly.",
         });
-        form.current.reset();
+        if (form.current) {
+          form.current.reset();
+        }
       })
-      .catch(() => {
+      .catch((err) => {
+        console.error('EmailJS transmission error:', err);
         setFormStatus({
           submitting: false,
           submitted: false,
           error: true,
-          message: 'Something went wrong. Please try again later.',
+          message: 'Transmission failed. Please try again or reach out directly via email.',
         });
       });
   };
 
   return (
-    <section id="contact" className="contact section" data-num="05">
+    <section id="contact" className="sp-contact-section" data-num="05">
       <Constellation />
 
-      <div className="section-head reveal">
-        <span className="section-kicker">05 — Contact</span>
-        <h2 className="section-title">Let's build something together</h2>
-        <p className="section-sub">
-          Have a project in mind, a role to fill, or just want to say hi?
-          My inbox is always open.
-        </p>
-      </div>
+      <div className="sp-contact-container">
+        {/* Section Header */}
+        <div className="sp-contact-header reveal">
+          <span className="sp-contact-badge">
+            <SparklesIcon width={14} height={14} />
+            05 — CONTACT
+          </span>
+          <h2 className="sp-contact-title">
+            Let's Build Something <span className="sp-title-cyan">Exceptional</span>
+          </h2>
+          <p className="sp-contact-subtitle">
+            Have a project in mind, an engineering role to discuss, or an AI architecture challenge?
+            My inbox is always open.
+          </p>
+        </div>
 
-      <div className="contact-content">
-        <div className="contact-info reveal reveal-left">
-          {channels.map(({ icon: Icon, label, value, href, external, copyable }) => (
-            <div key={label} className="contact-item-wrap">
-              <a
-                className="contact-item"
-                href={href}
-                {...(external
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-              >
-                <div className="contact-icon">
-                  <Icon />
+        {/* Contact Content Grid */}
+        <div className="sp-contact-grid">
+          {/* Left Column: Direct Channels */}
+          <div className="sp-contact-channels-col reveal reveal-left">
+            <div className="sp-channels-list">
+              {channels.map(({ icon: Icon, label, value, href, external, copyable }) => (
+                <div key={label} className="sp-channel-card-wrap">
+                  <a
+                    className="sp-channel-card"
+                    href={href}
+                    {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  >
+                    <div className="sp-channel-icon-box">
+                      <Icon width={20} height={20} />
+                    </div>
+                    <div className="sp-channel-details">
+                      <span className="sp-channel-label">{label}</span>
+                      <span className="sp-channel-value">{value}</span>
+                    </div>
+                  </a>
+
+                  {copyable && (
+                    <button
+                      type="button"
+                      className="sp-copy-btn"
+                      onClick={copyEmail}
+                      title="Copy email address"
+                      aria-label="Copy email address"
+                    >
+                      {copied ? (
+                        <CheckCircleIcon width={18} height={18} className="sp-copy-check" />
+                      ) : (
+                        <CopyIcon width={18} height={18} />
+                      )}
+                    </button>
+                  )}
                 </div>
-                <div className="contact-text">
-                  <span className="contact-label">{label}</span>
-                  <span className="contact-value">{value}</span>
+              ))}
+            </div>
+
+            {/* Response Time Card */}
+            <div className="sp-status-card">
+              <div className="sp-status-pulse-ring">
+                <span className="sp-pulse-dot" />
+                <ClockIcon width={18} height={18} className="sp-status-clock" />
+              </div>
+              <div className="sp-status-info">
+                <span className="sp-status-title">ACTIVE RESPONSE WINDOW</span>
+                <p className="sp-status-text">
+                  Usually responds within <strong>24 hours</strong>
+                </p>
+              </div>
+              <CheckCircleIcon className="sp-status-check" width={18} height={18} />
+            </div>
+          </div>
+
+          {/* Right Column: Terminal Form */}
+          <div className="sp-contact-form-col reveal reveal-right">
+            <div className="sp-contact-form-card">
+              <div className="sp-form-terminal-head">
+                <div className="sp-terminal-dots">
+                  <span className="dot red" />
+                  <span className="dot yellow" />
+                  <span className="dot green" />
                 </div>
-              </a>
-              {copyable && (
-                <button
-                  type="button"
-                  className="copy-btn"
-                  onClick={copyEmail}
-                  aria-label="Copy email address"
-                >
-                  {copied ? <CheckCircleIcon width={18} height={18} /> : <CopyIcon width={18} height={18} />}
-                </button>
+                <span className="sp-terminal-path">{'// TRANSMIT_MESSAGE.sh'}</span>
+              </div>
+
+              {formStatus.submitted ? (
+                <div className="sp-form-success" role="status">
+                  <div className="sp-success-icon-wrap">
+                    <CheckCircleIcon width={44} height={44} />
+                  </div>
+                  <h3>Message Sent!</h3>
+                  <p>{formStatus.message}</p>
+                  <button
+                    type="button"
+                    className="sp-reset-btn"
+                    onClick={() => setFormStatus((s) => ({ ...s, submitted: false }))}
+                  >
+                    Send Another Message
+                  </button>
+                </div>
+              ) : (
+                <form ref={form} className="sp-contact-form" onSubmit={sendEmail}>
+                  <div className="sp-form-row">
+                    <div className="sp-form-group">
+                      <label htmlFor="user_name">YOUR NAME</label>
+                      <input
+                        id="user_name"
+                        name="user_name"
+                        type="text"
+                        placeholder="John Doe"
+                        autoComplete="name"
+                        required
+                      />
+                    </div>
+
+                    <div className="sp-form-group">
+                      <label htmlFor="user_email">EMAIL ADDRESS</label>
+                      <input
+                        id="user_email"
+                        name="user_email"
+                        type="email"
+                        placeholder="john@example.com"
+                        autoComplete="email"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="sp-form-group">
+                    <label htmlFor="subject">SUBJECT / INQUIRY TYPE</label>
+                    <input
+                      id="subject"
+                      name="subject"
+                      type="text"
+                      placeholder="Project Collaboration / Role Opportunity"
+                      required
+                    />
+                  </div>
+
+                  <div className="sp-form-group">
+                    <label htmlFor="message">YOUR MESSAGE</label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      placeholder="Tell me about your project or inquiry..."
+                      rows="5"
+                      required
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="sp-submit-btn"
+                    disabled={formStatus.submitting}
+                  >
+                    {formStatus.submitting ? (
+                      <>
+                        <span className="sp-btn-spinner" aria-hidden="true" />
+                        Sending...
+                      </>
+                    ) : (
+                      <>
+                        Send Message
+                        <SendIcon width={16} height={16} />
+                      </>
+                    )}
+                  </button>
+
+                  {formStatus.error && (
+                    <div className="sp-form-error" role="alert">
+                      <p>{formStatus.message}</p>
+                    </div>
+                  )}
+                </form>
               )}
             </div>
-          ))}
-
-          <div className="contact-availability">
-            <ClockIcon width={18} height={18} />
-            <span>
-              Usually responds within <strong>24 hours</strong>
-            </span>
-            <CheckCircleIcon className="availability-check" width={16} height={16} />
           </div>
         </div>
-
-        <div className="contact-form-container reveal reveal-right">
-          {formStatus.submitted ? (
-            <div className="form-success" role="status">
-              <CheckCircleIcon width={44} height={44} />
-              <p>{formStatus.message}</p>
-            </div>
-          ) : (
-            <form ref={form} className="contact-form" onSubmit={sendEmail}>
-              <div className="form-row">
-                <div className="form-group form-float">
-                  <input
-                    id="name"
-                    name="user_name"
-                    type="text"
-                    placeholder=" "
-                    autoComplete="name"
-                    required
-                  />
-                  <label htmlFor="name">Name</label>
-                </div>
-
-                <div className="form-group form-float">
-                  <input
-                    id="email"
-                    name="user_email"
-                    type="email"
-                    placeholder=" "
-                    autoComplete="email"
-                    required
-                  />
-                  <label htmlFor="email">Email</label>
-                </div>
-              </div>
-
-              <div className="form-group form-float">
-                <input id="subject" name="subject" type="text" placeholder=" " required />
-                <label htmlFor="subject">Subject</label>
-              </div>
-
-              <div className="form-group form-float">
-                <textarea id="message" name="message" placeholder=" " rows="5" required />
-                <label htmlFor="message">Message</label>
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary submit-btn"
-                disabled={formStatus.submitting}
-              >
-                {formStatus.submitting ? (
-                  <>
-                    <span className="btn-spinner" aria-hidden="true" />
-                    Sending…
-                  </>
-                ) : (
-                  <>
-                    Send message
-                    <SendIcon width={18} height={18} />
-                  </>
-                )}
-              </button>
-
-              {formStatus.error && (
-                <p className="form-error" role="alert">
-                  {formStatus.message}
-                </p>
-              )}
-            </form>
-          )}
-        </div>
       </div>
 
-      <div className={`toast ${copied ? 'toast-visible' : ''}`} role="status" aria-live="polite">
-        {copied ? 'Email copied to clipboard ✓' : ''}
+      {/* Floating Toast Notification */}
+      <div className={`sp-contact-toast ${copied ? 'show' : ''}`} role="status" aria-live="polite">
+        <CheckCircleIcon width={16} height={16} />
+        <span>Email copied to clipboard</span>
       </div>
     </section>
   );
