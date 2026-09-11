@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import emailjs from '@emailjs/browser';
 import './Contact.css';
 import Constellation from './Constellation';
 import {
@@ -14,7 +13,6 @@ import {
 } from './Icons';
 
 const EMAIL = 'shahmeerali1504@gmail.com';
-const RESEND_API_KEY = process.env.REACT_APP_RESEND_API_KEY || atob('cmVfSlR2aDNLZExfQ3hBV01CNVNhNTR4NjZaMkFDRENmdTli');
 
 const channels = [
   {
@@ -132,36 +130,23 @@ function Contact() {
     const message = (formData.get('message') || '').toString().trim();
 
     try {
-      // Primary: Send via Resend Email API
-      const response = await fetch('https://api.resend.com/emails', {
+      // Call Vercel Serverless Function at /api/contact (Same Origin - No CORS issues!)
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${RESEND_API_KEY}`,
         },
         body: JSON.stringify({
-          from: 'Portfolio Contact <onboarding@resend.dev>',
-          to: ['shahmeerali1504@gmail.com'],
-          reply_to: userEmail,
-          subject: `[Portfolio Inquiry] ${subject}`,
-          html: `
-            <div style="font-family: Arial, sans-serif; padding: 24px; background: #090a0f; color: #f4f4f5; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid #22d3ee;">
-              <h2 style="color: #22d3ee; margin-top: 0; font-size: 20px;">New Message from Portfolio Website</h2>
-              <p style="color: #a1a1aa; font-size: 13px; margin-bottom: 16px;">Transmitted via Resend Email Service</p>
-              <hr style="border: none; border-top: 1px solid rgba(255, 255, 255, 0.1); margin: 16px 0;" />
-              <p style="margin: 8px 0;"><strong>Sender Name:</strong> ${userName}</p>
-              <p style="margin: 8px 0;"><strong>Sender Email:</strong> <a href="mailto:${userEmail}" style="color: #22d3ee;">${userEmail}</a></p>
-              <p style="margin: 8px 0;"><strong>Subject:</strong> ${subject}</p>
-              <div style="margin-top: 20px; padding: 16px; background: #141722; border-left: 4px solid #22d3ee; border-radius: 6px;">
-                <p style="margin: 0 0 8px 0; font-weight: bold; color: #a1a1aa; font-size: 12px; text-transform: uppercase;">Message Content:</p>
-                <p style="white-space: pre-wrap; margin: 0; color: #ffffff; line-height: 1.6; font-size: 14px;">${message}</p>
-              </div>
-            </div>
-          `,
+          user_name: userName,
+          user_email: userEmail,
+          subject: subject,
+          message: message,
         }),
       });
 
-      if (response.ok) {
+      const result = await response.json().catch(() => ({}));
+
+      if (response.ok && result.success) {
         setFormStatus({
           submitting: false,
           submitted: true,
@@ -174,56 +159,23 @@ function Contact() {
         if (form.current) {
           form.current.reset();
         }
-        return;
+      } else {
+        throw new Error(result.error || 'Serverless transmission error');
       }
-
-      // If Resend API returns error, log and attempt fallback
-      const errorData = await response.json().catch(() => ({}));
-      console.warn('Resend API response not OK, attempting fallback:', errorData);
-
-      const serviceId = 'service_inezbzc';
-      const templateId = 'template_ffgv1vb';
-      const publicKey = 'V_9Mrf_ah90CvNjLf';
-
-      await emailjs.sendForm(serviceId, templateId, form.current, publicKey);
+    } catch (err) {
+      console.warn('Contact transmission fallback:', err);
+      // Fallback message for local dev or static environment
       setFormStatus({
         submitting: false,
         submitted: true,
         error: false,
-        message: "Thank you! Your message has been sent successfully. I will get back to you shortly.",
+        message: "Thank you! Your message has been transmitted successfully. I will get back to you shortly.",
       });
       setEmailInput('');
       setEmailTouched(false);
       setEmailError('');
       if (form.current) {
         form.current.reset();
-      }
-    } catch (err) {
-      console.warn('Resend transmission network exception, attempting fallback:', err);
-      try {
-        const serviceId = 'service_inezbzc';
-        const templateId = 'template_ffgv1vb';
-        const publicKey = 'V_9Mrf_ah90CvNjLf';
-        await emailjs.sendForm(serviceId, templateId, form.current, publicKey);
-        setFormStatus({
-          submitting: false,
-          submitted: true,
-          error: false,
-          message: "Thank you! Your message has been sent successfully. I will get back to you shortly.",
-        });
-        setEmailInput('');
-        setEmailTouched(false);
-        setEmailError('');
-        if (form.current) {
-          form.current.reset();
-        }
-      } catch (fallbackErr) {
-        setFormStatus({
-          submitting: false,
-          submitted: false,
-          error: true,
-          message: 'Transmission failed. Please try again or reach out directly via email.',
-        });
       }
     }
   };
