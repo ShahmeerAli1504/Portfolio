@@ -65,7 +65,7 @@ const PROJECTS_DATA = [
       { label: 'Mobile Score', value: 'Fast UX' },
       { label: 'UI Theme', value: 'Dark Engineering' },
     ],
-    liveUrl: 'https://potluck-food-truck.vercel.app/',
+    liveUrl: 'https://potlucknv.com/',
     role: 'Full-Stack Developer',
     teamSize: 'Client Project',
     featured: true,
