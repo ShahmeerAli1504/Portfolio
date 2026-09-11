@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Projects.css';
 import {
@@ -787,122 +788,124 @@ function Projects() {
         )}
 
         {/* Detailed Modal Popup for Selected Project */}
-        {selectedModalProject && (
-          <div className="sp-modal-overlay" onClick={handleCloseModal}>
-            <div className="sp-modal-container" onClick={(e) => e.stopPropagation()}>
-              <button className="sp-modal-close-btn" onClick={handleCloseModal}>
-                <X size={18} />
-              </button>
+        {selectedModalProject &&
+          createPortal(
+            <div className="sp-modal-overlay" onClick={handleCloseModal}>
+              <div className="sp-modal-container" onClick={(e) => e.stopPropagation()}>
+                <button className="sp-modal-close-btn" onClick={handleCloseModal}>
+                  <X size={18} />
+                </button>
 
-              <div className="sp-modal-header">
-                <span className="sp-modal-category">{selectedModalProject.category}</span>
-                <h2 className="sp-modal-title">{selectedModalProject.name}</h2>
-                <p className="sp-modal-tagline">{selectedModalProject.tagline}</p>
-              </div>
-
-              <div className="sp-modal-body">
-                {selectedModalProject.problem && (
-                  <div className="sp-modal-section">
-                    <h4>
-                      <AlertTriangle size={14} className="sp-icon-amber" /> Core Challenge &amp; Bottleneck
-                    </h4>
-                    <p>{selectedModalProject.problem}</p>
-                  </div>
-                )}
-
-                <div className="sp-modal-section">
-                  <h4>
-                    <Server size={14} className="sp-icon-cyan" /> Full Architecture &amp; Tech Stack
-                  </h4>
-                  <div className="sp-arch-chips">
-                    {selectedModalProject.architecture.map((tech) => (
-                      <span key={tech} className="sp-arch-chip">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
+                <div className="sp-modal-header">
+                  <span className="sp-modal-category">{selectedModalProject.category}</span>
+                  <h2 className="sp-modal-title">{selectedModalProject.name}</h2>
+                  <p className="sp-modal-tagline">{selectedModalProject.tagline}</p>
                 </div>
 
-                {selectedModalProject.impact && selectedModalProject.impact.length > 0 && (
+                <div className="sp-modal-body">
+                  {selectedModalProject.problem && (
+                    <div className="sp-modal-section">
+                      <h4>
+                        <AlertTriangle size={14} className="sp-icon-amber" /> Core Challenge &amp; Bottleneck
+                      </h4>
+                      <p>{selectedModalProject.problem}</p>
+                    </div>
+                  )}
+
                   <div className="sp-modal-section">
                     <h4>
-                      <TrendingUp size={14} className="sp-icon-emerald" /> Production Deliverables &amp; Impact
+                      <Server size={14} className="sp-icon-cyan" /> Full Architecture &amp; Tech Stack
                     </h4>
-                    <ul className="sp-impact-list">
-                      {selectedModalProject.impact.map((point, idx) => (
-                        <li key={idx} className="sp-impact-item">
-                          <CheckCircle2 size={14} className="sp-icon-emerald sp-impact-check" />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {selectedModalProject.details && (
-                  <div className="sp-modal-section">
-                    <h4>System Architecture Overview</h4>
-                    <p>{selectedModalProject.details}</p>
-                  </div>
-                )}
-
-                {selectedModalProject.images && selectedModalProject.images.length > 0 && (
-                  <div className="sp-modal-gallery">
-                    <h4>Application Screenshots</h4>
-                    <div className="sp-gallery-grid">
-                      {selectedModalProject.images.map((img, idx) => (
-                        <img
-                          key={img}
-                          src={img}
-                          alt={`${selectedModalProject.name} preview ${idx + 1}`}
-                          className="sp-gallery-img"
-                        />
+                    <div className="sp-arch-chips">
+                      {selectedModalProject.architecture.map((tech) => (
+                        <span key={tech} className="sp-arch-chip">
+                          {tech}
+                        </span>
                       ))}
                     </div>
                   </div>
-                )}
 
-                {selectedModalProject.videos && selectedModalProject.videos.length > 0 && (
-                  <div className="sp-modal-videos">
-                    <h4>Interactive Video Demo</h4>
-                    {selectedModalProject.videos.map((vid) => (
-                      <video key={vid} controls className="sp-demo-video">
-                        <source src={vid} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    ))}
-                  </div>
-                )}
+                  {selectedModalProject.impact && selectedModalProject.impact.length > 0 && (
+                    <div className="sp-modal-section">
+                      <h4>
+                        <TrendingUp size={14} className="sp-icon-emerald" /> Production Deliverables &amp; Impact
+                      </h4>
+                      <ul className="sp-impact-list">
+                        {selectedModalProject.impact.map((point, idx) => (
+                          <li key={idx} className="sp-impact-item">
+                            <CheckCircle2 size={14} className="sp-icon-emerald sp-impact-check" />
+                            <span>{point}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {selectedModalProject.details && (
+                    <div className="sp-modal-section">
+                      <h4>System Architecture Overview</h4>
+                      <p>{selectedModalProject.details}</p>
+                    </div>
+                  )}
+
+                  {selectedModalProject.images && selectedModalProject.images.length > 0 && (
+                    <div className="sp-modal-gallery">
+                      <h4>Application Screenshots</h4>
+                      <div className="sp-gallery-grid">
+                        {selectedModalProject.images.map((img, idx) => (
+                          <img
+                            key={img}
+                            src={img}
+                            alt={`${selectedModalProject.name} preview ${idx + 1}`}
+                            className="sp-gallery-img"
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {selectedModalProject.videos && selectedModalProject.videos.length > 0 && (
+                    <div className="sp-modal-videos">
+                      <h4>Interactive Video Demo</h4>
+                      {selectedModalProject.videos.map((vid) => (
+                        <video key={vid} controls className="sp-demo-video">
+                          <source src={vid} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="sp-modal-footer">
+                  {selectedModalProject.liveUrl && (
+                    <a
+                      href={selectedModalProject.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="sp-wp-btn sp-wp-btn-cyan"
+                    >
+                      <span>Visit Live System</span>
+                      <ExternalLink size={14} />
+                    </a>
+                  )}
+
+                  {selectedModalProject.githubUrl && (
+                    <a
+                      href={selectedModalProject.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="sp-wp-btn sp-wp-btn-zinc"
+                    >
+                      <GithubIcon size={14} />
+                      <span>View GitHub Repository</span>
+                    </a>
+                  )}
+                </div>
               </div>
-
-              <div className="sp-modal-footer">
-                {selectedModalProject.liveUrl && (
-                  <a
-                    href={selectedModalProject.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="sp-wp-btn sp-wp-btn-cyan"
-                  >
-                    <span>Visit Live System</span>
-                    <ExternalLink size={14} />
-                  </a>
-                )}
-
-                {selectedModalProject.githubUrl && (
-                  <a
-                    href={selectedModalProject.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="sp-wp-btn sp-wp-btn-zinc"
-                  >
-                    <GithubIcon size={14} />
-                    <span>View GitHub Repository</span>
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
+            </div>,
+            document.body
+          )}
       </div>
     </section>
   );
