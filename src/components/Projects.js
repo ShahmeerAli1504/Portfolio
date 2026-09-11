@@ -23,54 +23,6 @@ const GithubIcon = ({ size = 14, className = '' }) => (
 
 const PROJECTS_DATA = [
   {
-    id: 'actragen',
-    name: 'ActraGen — Multi-Tenant AI Platform',
-    category: 'AR & AI',
-    tagline: 'Orchestration platform running 6 specialized AI agents & RAG document search.',
-    problem:
-      'Organizations required tailored AI assistant workflows and secure internal document intelligence without exposing proprietary files or context switching.',
-    architecture: ['Next.js', 'React', 'TypeScript', 'MongoDB Atlas', 'OpenAI', 'Gemini Embeddings', 'RAG Engine'],
-    impact: [
-      'Built multi-tenant AI workspace with persona assistants (analyst, consultant, CMO) and English/Arabic RTL support.',
-      'Engineered RAG pipeline: PDF ingestion, OCR, chunking, embeddings, and vector search over internal data.',
-      'Cut manual report turnaround time from ~4 hours to under 10 minutes (95.8% acceleration).',
-    ],
-    metrics: [
-      { label: 'Turnaround Time', value: '4h ➔ <10m' },
-      { label: 'Autonomous Agents', value: '6 Persona AI' },
-      { label: 'Retrieval Engine', value: 'Vector Search' },
-    ],
-    role: 'Full-Stack & AI Systems Lead',
-    teamSize: 'Dafinitiq AI Team',
-    featured: true,
-    details:
-      'Built during my time at Dafinitiq AI. ActraGen lets organizations create custom AI tools with dynamic prompts, chain them into automated workflows, and run persona-based assistants with bilingual English/Arabic RTL support. Includes a secure RAG subsystem: PDF ingestion with OCR, page-aware chunking, embeddings, MongoDB Atlas Vector Search, and hybrid retrieval over internal knowledge serving source-cited answers.',
-  },
-  {
-    id: 'rodrive',
-    name: 'RoDrive — Mobility & Ride-Hailing Backend',
-    category: 'Web',
-    tagline: 'High-concurrency backend powering dispatch, subscriptions, rentals & payments.',
-    problem:
-      'Managing high-concurrency trip dispatch, multi-city geofencing, multi-tier subscriptions, and driver payouts across fragmented legacy systems.',
-    architecture: ['Node.js', 'Express.js', 'MySQL', 'CakePHP', 'Docker', 'AWS ECS/ECR', 'GitHub Actions'],
-    impact: [
-      'Architected 25 route modules, 64 services, and 77 database models covering full trip lifecycle and driver dispatch.',
-      'Integrated JazzCash and Stripe payment gateways alongside automated wallet payouts and trip timeouts.',
-      'Automated deployment via Docker, GitHub Actions CI/CD, and AWS cloud infrastructure.',
-    ],
-    metrics: [
-      { label: 'Route Modules', value: '25 API Modules' },
-      { label: 'Database Models', value: '77 Models' },
-      { label: 'Deployment', value: 'AWS ECS + Docker' },
-    ],
-    role: 'Backend Architect',
-    teamSize: 'Dafinitiq AI Engineering',
-    featured: true,
-    details:
-      'Worked on this during my time at Dafinitiq AI. RoDrive is a large-scale ride-hailing and rental backend combining a CakePHP operations portal with a Node.js/Express API layer over MySQL (25 route modules, 64 services, 77 Sequelize models). Covered trip lifecycle dispatch, fare estimation, driver onboarding, wallets, Plan A–D subscriptions, JazzCash & Stripe checkout, and automated crons.',
-  },
-  {
     id: 'pure-haven',
     name: 'Pure Haven Studio Platform',
     category: 'Web',
@@ -171,6 +123,30 @@ const PROJECTS_DATA = [
       'LingoLearn helps users learn languages via AR scenarios, daily lessons, and quizzes. Users interact with an AI assistant and take immersive tests with real-time NLP feedback.',
   },
   {
+    id: 'rodrive',
+    name: 'RoDrive — Mobility & Ride-Hailing Mobile App',
+    category: 'Web',
+    tagline: 'Cross-platform ride-hailing & mobility mobile app ecosystem with real-time dispatch.',
+    problem:
+      'Managing high-concurrency mobile trip dispatch, live driver navigation, multi-tier subscriptions, and mobile payouts.',
+    architecture: ['Mobile App', 'Node.js', 'Express.js', 'MySQL', 'CakePHP', 'Docker', 'AWS ECS', 'JazzCash & Stripe'],
+    impact: [
+      'Engineered cross-platform mobile ride-hailing app experience & real-time trip dispatch backend.',
+      'Architected 25 route modules, 64 services, and 77 database models covering trip lifecycles and mobile wallets.',
+      'Integrated JazzCash and Stripe mobile payment gateways alongside automated driver wallet payouts.',
+    ],
+    metrics: [
+      { label: 'Ecosystem', value: 'Mobile App + API' },
+      { label: 'Database Models', value: '77 Models' },
+      { label: 'Deployment', value: 'AWS ECS + Docker' },
+    ],
+    role: 'Mobile & Backend Architect',
+    teamSize: 'Dafinitiq AI Engineering',
+    featured: true,
+    details:
+      'Worked on this during my time at Dafinitiq AI. RoDrive is a full mobility ecosystem comprising a mobile ride-hailing application and high-concurrency backend API layer over MySQL (25 route modules, 64 services, 77 Sequelize models). Covered mobile trip dispatch, live driver tracking, mobile wallet payouts, Plan A–D subscriptions, JazzCash & Stripe checkout, and automated crons.',
+  },
+  {
     id: 'raft-kv',
     name: 'Raft-Based Key-Value Store',
     category: 'Distributed Systems',
@@ -252,6 +228,30 @@ const PROJECTS_DATA = [
     ],
     details:
       'Developed a responsive web platform to provide homeschooling resources to parents, teachers, and students. Includes an Admin Dashboard for uploading YouTube videos, PDFs, and social media links, along with a public-facing landing page with filtering features.',
+  },
+  {
+    id: 'actragen',
+    name: 'ActraGen — Multi-Tenant AI Platform',
+    category: 'AR & AI',
+    tagline: 'Orchestration platform running 6 specialized AI agents & RAG document search.',
+    problem:
+      'Organizations required tailored AI assistant workflows and secure internal document intelligence without exposing proprietary files or context switching.',
+    architecture: ['Next.js', 'React', 'TypeScript', 'MongoDB Atlas', 'OpenAI', 'Gemini Embeddings', 'RAG Engine'],
+    impact: [
+      'Built multi-tenant AI workspace with persona assistants (analyst, consultant, CMO) and English/Arabic RTL support.',
+      'Engineered RAG pipeline: PDF ingestion, OCR, chunking, embeddings, and vector search over internal data.',
+      'Cut manual report turnaround time from ~4 hours to under 10 minutes (95.8% acceleration).',
+    ],
+    metrics: [
+      { label: 'Turnaround Time', value: '4h ➔ <10m' },
+      { label: 'Autonomous Agents', value: '6 Persona AI' },
+      { label: 'Retrieval Engine', value: 'Vector Search' },
+    ],
+    role: 'Full-Stack & AI Systems Lead',
+    teamSize: 'Dafinitiq AI Team',
+    featured: true,
+    details:
+      'Built during my time at Dafinitiq AI. ActraGen lets organizations create custom AI tools with dynamic prompts, chain them into automated workflows, and run persona-based assistants with bilingual English/Arabic RTL support. Includes a secure RAG subsystem: PDF ingestion with OCR, page-aware chunking, embeddings, MongoDB Atlas Vector Search, and hybrid retrieval over internal knowledge serving source-cited answers.',
   },
   {
     id: 'abdullah-portfolio',
