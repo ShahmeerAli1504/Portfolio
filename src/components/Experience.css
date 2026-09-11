@@ -1,175 +1,501 @@
-.timeline {
+/* Shahmeer Portfolio Scoped Experience Timeline Styling */
+
+.sp-exp-section {
+  padding: 96px 0;
+  background-color: #090a0f;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   position: relative;
-  max-width: 760px;
-  padding-left: 8px;
 }
 
-.timeline-tech {
+.sp-exp-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.sp-exp-header {
+  margin-bottom: 48px;
+  max-width: 850px;
+}
+
+.sp-exp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #22d3ee;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.sp-exp-title {
+  font-family: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  line-height: 1.15;
+}
+
+.sp-exp-subtitle {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 1rem;
+  color: #a1a1aa;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+/* Category Filters */
+.sp-exp-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding-top: 8px;
+}
+
+.sp-filter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #71717a;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-right: 4px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sp-filter-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #a1a1aa;
+  background: rgba(24, 24, 27, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sp-filter-btn:hover {
+  color: #22d3ee;
+  background: rgba(6, 182, 212, 0.1);
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.sp-filter-btn.active {
+  color: #000000;
+  background: #22d3ee;
+  border-color: #22d3ee;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.3);
+}
+
+/* Main Grid */
+.sp-exp-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 36px;
+}
+
+.sp-timeline-wrapper {
+  grid-column: span 8;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  padding-left: 28px;
+}
+
+/* Timeline Vertical Line */
+.sp-timeline-beam {
+  position: absolute;
+  left: 10px;
+  top: 12px;
+  bottom: 12px;
+  width: 2px;
+  background: linear-gradient(180deg, #06b6d4 0%, #10b981 50%, rgba(255, 255, 255, 0.08) 100%);
+  border-radius: 2px;
+}
+
+/* Timeline Entry Item */
+.sp-timeline-item {
+  position: relative;
+  transition: transform 0.2s ease;
+}
+
+.sp-highlight-card .sp-exp-card {
+  border-color: rgba(6, 182, 212, 0.6) !important;
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.25) !important;
+}
+
+/* Timeline Node Dot */
+.sp-timeline-node {
+  position: absolute;
+  left: -28px;
+  top: 24px;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.sp-node-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #090a0f;
+  border: 2px solid #22d3ee;
+  transition: all 0.25s ease;
+}
+
+.sp-timeline-item:hover .sp-node-dot {
+  transform: scale(1.4);
+  border-color: #34d399;
+  background: #34d399;
+}
+
+.sp-node-dot.featured {
+  border-color: #34d399;
+  background: #10b981;
+}
+
+.sp-node-pulse {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #34d399;
+  opacity: 0.75;
+  animation: sp-ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Experience Card */
+.sp-exp-card {
+  border-radius: 16px;
+  background: rgba(14, 16, 24, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.sp-exp-card:hover {
+  background: rgba(20, 23, 34, 0.98);
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(6, 182, 212, 0.15);
+}
+
+.sp-exp-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sp-role-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.sp-role-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.sp-type-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: #67e8f9;
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.sp-company-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.82rem;
+  color: #67e8f9;
+  margin-top: 4px;
+}
+
+.sp-meta-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: #a1a1aa;
+}
+
+.sp-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Highlights */
+.sp-highlights-box {
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.sp-highlights-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-highlight-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.85rem;
+  color: #d4d4d8;
+  line-height: 1.55;
+}
+
+.sp-chevron-bullet {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* Expand Toggle Button */
+.sp-expand-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: #22d3ee;
+  cursor: pointer;
+  padding: 4px 0;
+  width: fit-content;
+  transition: color 0.2s ease;
+}
+
+.sp-expand-toggle-btn:hover {
+  color: #67e8f9;
+  text-decoration: underline;
+}
+
+.sp-expand-icon {
+  transition: transform 0.25s ease;
+}
+
+.sp-expand-icon.rotated {
+  transform: rotate(180deg);
+}
+
+/* Skills Chips */
+.sp-skills-matrix {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  margin-top: 14px;
+  padding-top: 8px;
 }
 
-.timeline::before {
-  content: '';
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  left: 19px;
-  width: 2px;
-  background: linear-gradient(to bottom, var(--accent), var(--accent-2), transparent);
-  opacity: 0.35;
+.sp-skill-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: #a1a1aa;
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.timeline-item {
-  position: relative;
+.sp-skill-tag:hover,
+.sp-skill-tag.active-skill {
+  color: #22d3ee;
+  background: rgba(6, 182, 212, 0.15);
+  border-color: rgba(6, 182, 212, 0.4);
+  transform: scale(1.05);
+}
+
+/* Sidebar (Right Column) */
+.sp-exp-sidebar {
+  grid-column: span 4;
   display: flex;
+  flex-direction: column;
   gap: 24px;
-  padding-bottom: 40px;
 }
 
-.timeline-item:last-child {
-  padding-bottom: 0;
-}
-
-.timeline-marker {
-  position: relative;
-  flex: 0 0 24px;
+.sp-sidebar-card {
+  border-radius: 16px;
+  background: rgba(14, 16, 24, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 24px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 16px;
+  transition: all 0.25s ease;
 }
 
-.timeline-dot {
-  position: relative;
-  z-index: 1;
-  width: 14px;
-  height: 14px;
-  margin-top: 6px;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 3px solid var(--accent);
-  transition: transform var(--dur-fast) var(--ease-out);
+.sp-sidebar-card:hover {
+  background: rgba(20, 23, 34, 0.98);
+  transform: translateY(-2px);
 }
 
-.timeline-dot.is-current {
-  background: var(--accent);
-  box-shadow: 0 0 8px var(--glow);
+.sp-edu-card:hover {
+  border-color: rgba(6, 182, 212, 0.35);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(6, 182, 212, 0.15);
 }
 
-.timeline-card {
-  flex: 1;
-  padding: 22px 24px;
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-card);
-  transition: border-color var(--dur-fast) ease;
+.sp-honors-card:hover {
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(16, 185, 129, 0.15);
 }
 
-.timeline-item:hover .timeline-card {
-  border-color: var(--accent);
-}
-
-.timeline-item:hover .timeline-dot {
-  border-color: var(--accent-strong);
-}
-
-.timeline-card-head {
+.sp-sidebar-header {
   display: flex;
   align-items: center;
   gap: 12px;
-  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.timeline-card h3 {
-  font-size: 1.08rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+.sp-sidebar-icon-box {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.timeline-now {
-  padding: 2px 10px;
-  border-radius: 999px;
+.sp-sidebar-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.sp-sidebar-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: #71717a;
+}
+
+.sp-degree-title {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #67e8f9;
+  margin: 0 0 4px 0;
+}
+
+.sp-inst-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: #d4d4d8;
+  margin: 0 0 2px 0;
+}
+
+.sp-inst-loc {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: #71717a;
+  margin: 0;
+}
+
+.sp-coursework-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sp-course-label {
+  font-family: 'JetBrains Mono', monospace;
   font-size: 0.7rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--success);
-  background: color-mix(in srgb, var(--success) 12%, transparent);
+  color: #a1a1aa;
+  letter-spacing: 0.05em;
 }
 
-.timeline-company {
-  margin-top: 4px;
-  font-size: 0.92rem;
-  font-weight: 500;
-  color: var(--accent);
+.sp-course-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
-.timeline-time {
+.sp-course-chip {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem;
+  color: #d4d4d8;
+  background: #18181b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.sp-honors-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sp-honor-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.82rem;
+  color: #d4d4d8;
+  line-height: 1.5;
+}
+
+.sp-honor-check {
+  flex-shrink: 0;
   margin-top: 2px;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--text-faint);
 }
 
-.timeline-desc {
-  margin-top: 12px;
-  font-size: 0.94rem;
-  line-height: 1.65;
-  color: var(--text-muted);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .timeline-dot.is-current {
-    animation: none;
-  }
-}
-
-/* Desktop: central line, cards alternate left/right of it */
-@media (min-width: 900px) {
-  .timeline {
-    max-width: 980px;
-    margin: 0 auto;
-    padding-left: 0;
+@media (max-width: 1024px) {
+  .sp-exp-grid {
+    grid-template-columns: 1fr;
   }
 
-  .timeline::before {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .timeline-item {
-    width: calc(50% + 12px);
-    padding-bottom: 32px;
-  }
-
-  /* Marker is 24px wide; item edges overlap the center by 12px so the
-     dot's center always lands exactly on the line. */
-  .timeline-item.is-left {
-    flex-direction: row-reverse;
-    margin-right: auto;
-  }
-
-  .timeline-item.is-right {
-    margin-left: calc(50% - 12px);
-  }
-}
-
-@media (max-width: 560px) {
-  .timeline {
-    padding-left: 0;
-  }
-
-  .timeline::before {
-    left: 11px;
-  }
-
-  .timeline-item {
-    gap: 16px;
-  }
-
-  .timeline-card {
-    padding: 18px;
+  .sp-timeline-wrapper,
+  .sp-exp-sidebar {
+    grid-column: span 1;
   }
 }
